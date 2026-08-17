@@ -1,0 +1,72 @@
+{
+  "id": "dog_v1",
+  "name": "犬奴示例",
+  "version": 1,
+  "schemaVersion": 1,
+  "vocabulary": {
+    "promise": "训练任务",
+    "card": "奖励卡",
+    "score": "服从分",
+    "traces": "训练记录",
+    "memories": "犬舍记录",
+    "diary": "犬奴日志",
+    "mood": "今日状态",
+    "anniversary": "纪念日",
+    "ledger": "服从分"
+  },
+  "shared": {
+    "begin": "新的训练记录开始了",
+    "beginContent": "从今天起，认真完成双方同意的任务",
+    "journal": "犬奴日志",
+    "mood": "今日状态",
+    "promise": "训练任务",
+    "card": "奖励卡",
+    "accept": "收到，开始执行",
+    "pause": "先暂停训练",
+    "cancel": "这项任务先取消",
+    "backup": "犬舍备份"
+  },
+  "eventLabels": {
+    "begin": "新的训练记录开始了",
+    "initiate": "发布了训练任务",
+    "counter": "重新协商了训练要求",
+    "accept": "接受了训练任务",
+    "submit": "报告任务完成",
+    "confirm": "确认完成",
+    "revise": "要求重新训练",
+    "cancel": "取消了训练任务",
+    "pause": "暂缓了训练",
+    "journal": "写下了犬奴日志",
+    "mood": "更新了今日状态",
+    "create": "准备了奖励",
+    "request": "申请了一份奖励"
+  },
+  "actions": {
+    "promise": {
+      "initiate": "发布训练任务",
+      "counter": "重新协商",
+      "accept": "接受并开始",
+      "submit": "完成并报告",
+      "confirm": "确认完成",
+      "revise": "重新训练",
+      "cancel": "取消任务",
+      "pause": "暂缓执行"
+    },
+    "card": {
+      "offer": "提交奖励方案",
+      "accept": "按这个分领取",
+      "counter": "重新协商奖励",
+      "pause": "暂不启用",
+      "withdraw": "收回奖励",
+      "giveup": "先暂存奖励",
+      "redeem": "领取奖励"
+    }
+  },
+  "cards": {
+    "pageTitle": "我的奖励卡",
+    "customGuideEntry": "给 TA 准备奖励",
+    "customRespondEntry": "向 TA 申请奖励",
+    "customGuideSubtitle": "写下愿意为 TA 做的事情，等 TA 用服从分领取。",
+    "customRespondSubtitle": "写下希望 TA 为你做的事情，等待确认。"
+  }
+}

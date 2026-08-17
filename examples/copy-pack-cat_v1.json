@@ -1,0 +1,72 @@
+{
+  "id": "cat_v1",
+  "name": "猫奴示例",
+  "version": 1,
+  "schemaVersion": 1,
+  "vocabulary": {
+    "promise": "任务",
+    "card": "赏赐卡",
+    "score": "置信分",
+    "traces": "爪印",
+    "memories": "猫窝记录",
+    "diary": "猫奴手记",
+    "mood": "今日状态",
+    "anniversary": "纪念日",
+    "ledger": "置信分"
+  },
+  "shared": {
+    "begin": "新的猫窝记录开始了",
+    "beginContent": "从今天起，认真照看这段关系",
+    "journal": "猫奴手记",
+    "mood": "今日状态",
+    "promise": "任务",
+    "card": "赏赐卡",
+    "accept": "收到，马上去做",
+    "pause": "先收起爪子",
+    "cancel": "这项任务先撤回",
+    "backup": "猫窝备份"
+  },
+  "eventLabels": {
+    "begin": "新的猫窝记录开始了",
+    "initiate": "下达了任务",
+    "counter": "重新议定了要求",
+    "accept": "接下了任务",
+    "submit": "完成了任务",
+    "confirm": "验收通过",
+    "revise": "要求再认真一点",
+    "cancel": "暂时撤回了任务",
+    "pause": "先放进猫窝",
+    "journal": "写下了猫奴手记",
+    "mood": "更新了今日状态",
+    "create": "准备了赏赐",
+    "request": "申请了一份赏赐"
+  },
+  "actions": {
+    "promise": {
+      "initiate": "下达新任务",
+      "counter": "重新议定",
+      "accept": "收到，执行",
+      "submit": "完成并请验收",
+      "confirm": "验收通过",
+      "revise": "再认真一点",
+      "cancel": "撤回任务",
+      "pause": "暂不执行"
+    },
+    "card": {
+      "offer": "提交赏赐方案",
+      "accept": "按这个分领取",
+      "counter": "重新商量赏赐",
+      "pause": "暂不启用",
+      "withdraw": "收回这份赏赐",
+      "giveup": "先放进猫窝",
+      "redeem": "领取赏赐"
+    }
+  },
+  "cards": {
+    "pageTitle": "我的赏赐卡",
+    "customGuideEntry": "给 TA 准备赏赐",
+    "customRespondEntry": "向 TA 申请赏赐",
+    "customGuideSubtitle": "写下愿意为 TA 做的事情，等 TA 用置信分领取。",
+    "customRespondSubtitle": "写下希望 TA 为你做的事情，等待确认。"
+  }
+}
