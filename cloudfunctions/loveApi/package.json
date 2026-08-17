@@ -1,0 +1,10 @@
+{
+  "name": "loveApi",
+  "version": "1.0.0",
+  "description": "听你的呀 唯一云函数入口",
+  "main": "index.js",
+  "dependencies": {
+    "lunar-javascript": "^1.7.7",
+    "wx-server-sdk": "~2.4.0"
+  }
+}

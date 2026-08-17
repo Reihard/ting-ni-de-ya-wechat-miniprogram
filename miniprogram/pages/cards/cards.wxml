@@ -1,0 +1,58 @@
+<view class="page {{themeClass}}">
+  <view class="page-title">{{copy.vocabulary.card}}</view>
+
+  <view class="card-item {{item.state === '已生效' ? 'card-active' : (item.state === '未激活' || item.state === '暂不启用' || item.state === '已放弃' ? 'card-dim' : '')}}" wx:for="{{cards}}" wx:key="cardType" data-card-type="{{item.cardType}}" bindtap="goDetail" hover-class="card-hover">
+    <view class="card-head">
+      <text class="card-name">{{item.name}}</text>
+      <view class="card-state-tag {{item.state === '已生效' ? 'state-on' : (item.state === '协商中' ? 'state-negotiating' : '')}}">{{item.state}}</view>
+    </view>
+
+    <view class="card-desc">{{item.desc}}</view>
+
+    <view class="card-price" wx:if="{{item.state === '已生效'}}">
+      {{item.lockedText}}
+    </view>
+
+    <view class="card-soft" wx:if="{{item.state === '暂不启用' && role === 'respond'}}">
+      {{copy.cards.paused}}
+    </view>
+
+    <view class="card-actions" wx:if="{{item.actions.length && !needInput}}">
+      <button class="card-btn" wx:for="{{item.actions}}" wx:for-item="act" wx:key="key" data-card="{{item.cardType}}" data-key="{{act.key}}" catchtap="onTapAction">{{act.label}}</button>
+    </view>
+
+    <!-- 输入区移到卡片内，仅当前操作的卡显示 -->
+    <view class="input-area" wx:if="{{needInput && inputCard === item.name}}" catchtap="noop">
+      <view class="input-title">{{copy.cards.inputTitle}}</view>
+      <input class="field-input" type="number" maxlength="3" placeholder="0-999" value="{{inputScore}}" bindinput="onInputScore" />
+      <view class="input-actions">
+        <button class="ghost-btn" catchtap="onCancelInput">{{copy.cards.cancel}}</button>
+        <button class="cta-btn" catchtap="onSubmitInput">{{copy.cards.send}}</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="custom-card-entry" wx:if="{{role === 'guide'}}">
+    <button class="ghost-btn" bindtap="toggleCustom">{{customVisible ? '收起定制心意卡' : copy.cards.customGuideEntry}}</button>
+    <view class="custom-card-form" wx:if="{{customVisible}}">
+      <view class="custom-card-title">{{copy.cards.customGuideEntry}}</view>
+      <view class="custom-card-subtitle">{{copy.cards.customGuideSubtitle}}</view>
+      <input class="field-input" maxlength="20" placeholder="{{copy.cards.customNamePlaceholder}}" value="{{customName}}" data-key="customName" bindinput="onCustomInput" />
+      <textarea class="field-input custom-card-desc" maxlength="100" placeholder="{{copy.cards.customGuideDescPlaceholder}}" value="{{customDesc}}" data-key="customDesc" bindinput="onCustomInput"></textarea>
+      <input class="field-input" type="number" maxlength="2" placeholder="{{copy.cards.scorePlaceholder}}" value="{{customScore}}" data-key="customScore" bindinput="onCustomInput" />
+      <button class="cta-btn" bindtap="createCustom">{{copy.cards.customSave}}</button>
+    </view>
+  </view>
+
+  <view class="custom-card-entry" wx:if="{{role === 'respond'}}">
+    <button class="ghost-btn" bindtap="toggleCustom">{{customVisible ? '收起定制心意卡' : copy.cards.customRespondEntry}}</button>
+    <view class="custom-card-form" wx:if="{{customVisible}}">
+      <view class="custom-card-title">{{copy.cards.customRespondEntry}}</view>
+      <view class="custom-card-subtitle">{{copy.cards.customRespondSubtitle}}</view>
+      <input class="field-input" maxlength="20" placeholder="{{copy.cards.customNamePlaceholder}}" value="{{customName}}" data-key="customName" bindinput="onCustomInput" />
+      <textarea class="field-input custom-card-desc" maxlength="100" placeholder="{{copy.cards.customRespondDescPlaceholder}}" value="{{customDesc}}" data-key="customDesc" bindinput="onCustomInput"></textarea>
+      <input class="field-input" type="number" maxlength="2" placeholder="{{copy.cards.payScorePlaceholder}}" value="{{customScore}}" data-key="customScore" bindinput="onCustomInput" />
+      <button class="cta-btn" bindtap="createCustomRequest">{{copy.cards.customRequest}}</button>
+    </view>
+  </view>
+</view>

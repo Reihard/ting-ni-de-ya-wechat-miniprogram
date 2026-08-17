@@ -1,0 +1,84 @@
+<view class="page {{themeClass}}">
+  <view class="page-title">{{copy.pair.title}}</view>
+
+  <!-- 加入确认（通过分享链接，默认不可见） -->
+  <view wx:if="{{stage === 'join'}}" class="card">
+    <view class="join-guide-name">{{guideName}} 把你们的空间建好了，就差你了</view>
+
+    <view class="join-names">
+      <view class="join-row">
+        <view class="join-label">空间名称</view>
+        <view class="join-value">{{spaceName}}</view>
+      </view>
+      <view class="join-row">
+        <view class="join-label">引导方称呼</view>
+        <view class="join-value">{{guideName}}</view>
+      </view>
+      <view class="join-row">
+        <view class="join-label">你的称呼</view>
+        <view class="join-value">{{respondName}}</view>
+      </view>
+      <view class="join-row">
+        <view class="join-label">我们开始的时间</view>
+        <view class="join-value">{{startDateText}}</view>
+      </view>
+    </view>
+
+    <view class="join-hint">称呼由 {{guideName}} 为你设定，一旦确认不再修改</view>
+
+    <button class="primary-btn" bindtap="onJoin">{{copy.pair.joinConfirm}}</button>
+  </view>
+
+  <!-- 正常进入：身份 tab + 内容切换 -->
+  <block wx:else>
+    <!-- 身份 tab -->
+    <view class="identity-tabs">
+      <view class="identity-tab {{role === 'guide' ? 'tab-on' : ''}}" data-role="guide" bindtap="selectRole">
+        {{copy.pair.guideTab}}
+      </view>
+      <view class="identity-tab {{role === 'respond' ? 'tab-on' : ''}}" data-role="respond" bindtap="selectRole">
+        {{copy.pair.respondTab}}
+      </view>
+    </view>
+
+    <!-- 引导方：创建表单 -->
+    <view wx:if="{{role === 'guide'}}" class="card">
+      <view class="form-section">{{copy.pairForm.spaceLabel}}</view>
+      <input class="input" maxlength="20" placeholder-class="placeholder" placeholder="{{copy.pairForm.spacePlaceholder}}" value="{{spaceName}}" bindinput="onSpaceNameInput" />
+
+      <view class="form-section">{{copy.pairForm.guideLabel}}</view>
+      <input class="input" maxlength="20" placeholder-class="placeholder" placeholder="{{copy.pairForm.placeholder}}" value="{{guideName}}" bindinput="onGuideNameInput" />
+
+      <view class="form-section">{{copy.pairForm.respondLabel}}</view>
+      <input class="input" maxlength="20" placeholder-class="placeholder" placeholder="{{copy.pairForm.placeholder}}" value="{{respondName}}" bindinput="onRespondNameInput" />
+
+      <view class="form-hint">{{copy.pairForm.hint}}</view>
+
+        <view class="form-section">{{copy.pair.startDateLabel}}</view>
+
+      <radio-group bindchange="onStartDateModeChange">
+        <label class="radio-label">
+          <radio value="today" checked="{{startDateMode === 'today'}}" />
+          <text>{{copy.pair.startToday}}</text>
+        </label>
+        <label class="radio-label">
+          <radio value="past" checked="{{startDateMode === 'past'}}" />
+          <text>{{copy.pair.startEarlier}}</text>
+        </label>
+      </radio-group>
+
+      <picker wx:if="{{startDateMode === 'past'}}" mode="date" value="{{startDate}}" start="2000-01-01" end="{{todayDate}}" bindchange="onStartDateChange">
+        <view class="picker-display">{{startDate || copy.pair.chooseDate}}</view>
+      </picker>
+
+      <button class="primary-btn" hover-class="btn-hover" bindtap="onCreate">{{copy.pair.create}}</button>
+    </view>
+
+    <!-- 回应方：等待邀请 -->
+    <view wx:else class="card waiting-card">
+      <view class="waiting-title">{{copy.pair.waitingTitle}}</view>
+      <view class="waiting-desc">{{copy.pair.waitingDesc}}</view>
+      <view class="waiting-desc">{{copy.pair.waitingInvite}}</view>
+    </view>
+  </block>
+</view>

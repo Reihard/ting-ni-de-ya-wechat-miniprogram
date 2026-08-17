@@ -1,0 +1,13 @@
+# Local WeChat / environment settings
+project.private.config.json
+project.config.local.json
+
+# Personal exports and backup data
+old-backup-converted-ting-v1.json
+new-space-0731-backup.json
+merged-space-0731-backup.json
+*backup*.json
+
+# Local tooling
+.DS_Store
+node_modules/

@@ -1,0 +1,60 @@
+<view class="page {{themeClass}}">
+  <view class="hero-card">
+    <view class="hero-title">{{info.title}}</view>
+    <view class="hero-desc" wx:if="{{info.description}}">{{info.description}}</view>
+    <view class="hero-state">
+      <view class="state-tag">{{state}}</view>
+    </view>
+    <view class="hero-desc" wx:if="{{info.latestMessage}}">{{info.latestMessage}}</view>
+    <view class="hero-desc" wx:elif="{{info.desc}}">{{info.desc}}</view>
+    <view class="hero-score" wx:if="{{info.score}}">{{copy.detail.score}} {{info.score}}</view>
+  </view>
+
+  <view class="action-area">
+    <view class="input-area" wx:if="{{showInputArea}}">
+      <textarea class="action-input" maxlength="50" placeholder="{{copy.detail.inputPlaceholder}}" value="{{inputText}}" bindinput="onInputText" />
+    </view>
+    <view class="action-buttons" wx:if="{{actions.length}}">
+      <button class="action-btn" wx:for="{{actions}}" wx:key="key" data-key="{{item.key}}" bindtap="onTapAction">{{item.label}}</button>
+    </view>
+  </view>
+
+  <view class="edit-area" wx:if="{{editingInitiate && !isCard}}">
+    <view class="form-section">{{copy.vocabulary.promise}}{{copy.detail.titleSuffix}}</view>
+    <input class="input" maxlength="15" value="{{editTitle}}" bindinput="onEditTitleInput" />
+
+    <view class="form-section">{{copy.detail.scoreLabel}}</view>
+    <input class="input" type="number" value="{{editScore}}" bindinput="onEditScoreInput" />
+
+    <view class="form-section">{{copy.detail.reviseReason}}</view>
+    <textarea class="textarea" maxlength="50" value="{{editReason}}" bindinput="onEditReasonInput" />
+
+    <button class="action-btn" bindtap="onSubmitEdit">{{copy.detail.confirmEdit}}</button>
+    <button class="action-btn ghost" bindtap="onCancelEdit">{{copy.detail.cancelEdit}}</button>
+  </view>
+
+  <!-- 心意卡编辑区：分值 + 理由 -->
+  <view class="edit-area" wx:if="{{editingInitiate && isCard}}">
+    <view class="form-section">{{copy.detail.scoreNew}}</view>
+    <input class="input" type="number" value="{{editScore}}" bindinput="onEditScoreInput" />
+    <view class="form-section">{{copy.detail.reasonOptional}}</view>
+    <textarea class="textarea" maxlength="50" value="{{editReason}}" bindinput="onEditReasonInput" />
+    <button class="action-btn" bindtap="onSubmitCardEdit">确认</button>
+    <button class="action-btn ghost" bindtap="onCancelEdit">取消</button>
+  </view>
+
+  <view class="soft-copy" wx:if="{{softCopy}}">{{softCopy}}</view>
+
+  <view class="events-card">
+    <view class="events-header" bindtap="toggleEvents">
+      <text class="events-title">这个{{copy.vocabulary.promise}}的经过</text>
+      <text class="events-toggle">{{eventsExpanded ? copy.detail.collapse : copy.detail.expand}}</text>
+    </view>
+    <view class="events-list" wx:if="{{eventsExpanded}}">
+      <view wx:for="{{events}}" wx:key="index" class="event-item">
+        <view class="event-content">{{item.text}}</view>
+        <view class="event-meta">{{item.label}} · {{item.actorName}} · {{item.time}}</view>
+      </view>
+    </view>
+  </view>
+</view>

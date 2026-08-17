@@ -1,0 +1,69 @@
+<view class="page {{themeClass}}">
+  <view class="hero-card">
+    <view class="hero-title">{{copy.vocabulary.memories}}</view>
+    <view class="hero-subtitle">{{copy.memories.subtitle}}</view>
+  </view>
+
+  <view wx:if="{{disbandMode}}" class="card memory-card disband-card">
+    <view class="disband-title">{{copy.memories.disbandTitle}}</view>
+    <view class="disband-text">{{copy.memories.disbandText}}</view>
+    <input class="disband-input" maxlength="30" value="{{disbandName}}" bindinput="onDisbandInput" placeholder="{{copy.memories.spaceNamePlaceholder}}" placeholder-class="disband-placeholder" />
+    <button class="memory-btn memory-btn-primary" bindtap="confirmDisband" loading="{{importing}}" disabled="{{!canDisband}}">{{copy.memories.confirmDisband}}</button>
+    <button class="memory-btn memory-btn-secondary" bindtap="cancelDisband">{{copy.memories.stay}}</button>
+  </view>
+
+  <view wx:if="{{backupMode}}" class="card memory-card disband-card">
+    <view class="disband-title">{{copy.memories.disbandReadonlyTitle}}</view>
+    <view class="disband-text">{{copy.memories.backupOnly}}</view>
+    <view class="step" wx:if="{{backupUntilText}}">{{copy.memories.backupUntil}}{{backupUntilText}}</view>
+    <button class="memory-btn memory-btn-primary" bindtap="onExport" loading="{{exporting}}" disabled="{{exporting}}">{{copy.memories.backupExport}}</button>
+    <button class="memory-btn memory-btn-secondary" bindtap="deleteBackup" loading="{{importing}}" disabled="{{importing}}">{{copy.memories.backupDelete}}</button>
+  </view>
+
+  <view class="card memory-card" wx:if="{{!backupMode && !disbandMode}}">
+    <view class="card-title">{{copy.memories.backupTitle}}</view>
+    <view class="card-text">{{copy.memories.clipboardText}}</view>
+    <view class="step-title">{{copy.memories.stepTitle}}</view>
+    <view class="step">{{copy.memories.backupStep1}}</view><view class="step">{{copy.memories.backupStep2}}</view><view class="step">{{copy.memories.backupStep3}}</view>
+    <button class="memory-btn memory-btn-primary" bindtap="onExport" loading="{{exporting}}" disabled="{{exporting}}">{{copied ? copy.memories.copied : copy.memories.export}}</button>
+  </view>
+
+  <view class="card memory-card" wx:if="{{!backupMode && !disbandMode}}">
+    <view class="card-title">{{copy.memories.restoreTitle}}</view>
+    <view class="card-text">{{copy.memories.restoreSteps}}</view>
+    <view class="step-title">{{copy.memories.stepTitle}}</view>
+    <view class="step">{{copy.memories.restoreStep1}}</view><view class="step">{{copy.memories.restoreStep2}}</view><view class="step">{{copy.memories.restoreStep3}}</view>
+    <button class="memory-btn memory-btn-secondary" bindtap="onImport" loading="{{importing}}" disabled="{{importing}}">{{copy.memories.import}}</button>
+    <view wx:if="{{manualVisible}}" class="manual-box">
+      <view class="manual-hint">{{copy.memories.manualHint}}</view>
+      <textarea class="manual-input" value="{{manualText}}" bindinput="onManualInput" placeholder="{{copy.memories.manualPlaceholder}}" />
+      <button class="memory-btn memory-btn-primary" bindtap="parseManual">{{copy.memories.parse}}</button>
+    </view>
+    <view wx:if="{{importPreview}}" class="preview-box">
+      <view class="preview-title">{{copy.memories.found}}</view>
+      <block wx:if="{{importPreview.type === 'copy_pack'}}">
+        <view class="preview-text">{{copy.memories.copyPackPreviewPrefix}}{{importPreview.copyName}}</view>
+        <view class="preview-text">{{copy.memories.copyPreviewVocabulary}}{{importPreview.copyVocabulary}}</view>
+        <view class="preview-text">{{copy.memories.copyPreviewHome}}{{importPreview.copyHomeTitle}}</view>
+        <view class="preview-text">{{copy.memories.copyPreviewAction}}{{importPreview.copyAction}}</view>
+        <view class="preview-warn">{{copy.memories.copyPackOverwrite}}</view>
+      </block>
+      <block wx:else>
+        <view class="preview-text">{{copy.memories.space}}{{importPreview.spaceName}}</view>
+        <view class="preview-text">{{copy.memories.size}}{{importPreview.sizeKB}} KB</view>
+        <view class="preview-text">{{copy.memories.records}}{{importPreview.eventCount}} 条</view>
+        <view class="preview-warn">{{importTargetExisting ? copy.memories.mergePreview : copy.memories.restorePreview}}</view>
+      </block>
+      <view class="preview-actions">
+        <button wx:if="{{importPreview.type === 'copy_pack'}}" class="memory-btn memory-btn-primary" bindtap="confirmCopyImport">{{copy.memories.importConfirm}}</button>
+        <button wx:else class="memory-btn memory-btn-primary" bindtap="confirmImport">{{importTargetExisting ? copy.memories.confirmImport : copy.memories.confirmRestore}}</button>
+        <button class="memory-btn memory-btn-secondary" bindtap="cancelImport">{{copy.cards.cancel}}</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="card memory-card explain-card" wx:if="{{!disbandMode}}">
+    <view class="card-title">{{copy.memories.clipboardTitle}}</view>
+    <view class="card-text">{{copy.memories.clipboardText}}</view>
+  </view>
+</view>

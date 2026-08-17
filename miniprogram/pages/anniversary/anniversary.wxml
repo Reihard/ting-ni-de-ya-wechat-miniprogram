@@ -1,0 +1,46 @@
+<view class="page {{themeClass}}">
+  <view class="page-title">{{copy.vocabulary.anniversary}}</view>
+
+  <view class="list">
+    <view wx:if="{{anniversaries.length}}">
+      <view class="ann-item" wx:for="{{anniversaries}}" wx:key="index">
+        <view class="ann-head">
+          <view class="ann-name">{{item.name}}</view>
+          <view class="ann-cycle-tag">{{item.remindCycle === 'year' ? copy.anniversary.yearly : copy.anniversary.monthly}}</view>
+        </view>
+        <view class="ann-elapsed" wx:if="{{item.elapsedText}}">{{item.elapsedText}}</view>
+        <view class="ann-next" wx:if="{{item.nextText}}">✦ {{item.nextText}}</view>
+        <view class="ann-del" data-index="{{index}}" bindtap="onDelete">{{copy.anniversary.delete}}</view>
+      </view>
+    </view>
+    <view wx:else class="ann-empty">{{copy.anniversary.empty}}</view>
+  </view>
+
+  <view wx:if="{{!showAdd}}" class="add-btn-wrap">
+    <button class="primary-btn add-btn" bindtap="onToggleAdd">{{copy.anniversary.add}}</button>
+  </view>
+
+  <view wx:if="{{showAdd}}" class="form-card">
+    <view class="form-section">{{copy.anniversary.nameLabel}}</view>
+    <input class="input" maxlength="20" placeholder-class="placeholder" placeholder="{{copy.anniversary.namePlaceholder}}" value="{{name}}" bindinput="onNameInput" />
+
+    <view class="form-section">{{copy.anniversary.dateLabel}}</view>
+    <picker mode="date" value="{{date}}" bindchange="onDateChange">
+      <view class="input picker-input">{{date || copy.anniversary.chooseDate}}</view>
+    </picker>
+
+    <view class="form-section">{{copy.anniversary.cycleLabel}}</view>
+    <radio-group bindchange="onCycleChange">
+      <label class="cycle-tag {{remindCycle === 'year' ? 'cycle-tag-on' : ''}}">
+        <radio value="year" checked="{{remindCycle === 'year'}}" />
+        <text>{{copy.anniversary.yearly}}</text>
+      </label>
+      <label class="cycle-tag {{remindCycle === 'month' ? 'cycle-tag-on' : ''}}">
+        <radio value="month" checked="{{remindCycle === 'month'}}" />
+        <text>{{copy.anniversary.monthly}}</text>
+      </label>
+    </radio-group>
+
+    <button class="primary-btn" bindtap="onAdd">{{copy.anniversary.save}}</button>
+  </view>
+</view>

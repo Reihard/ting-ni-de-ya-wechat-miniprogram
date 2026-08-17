@@ -1,0 +1,502 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 40rpx;
+}
+
+.onboarding-card {
+  margin-bottom: 24rpx;
+  padding: 28rpx 24rpx;
+  box-shadow: var(--sh-raise);
+}
+
+.onboarding-kicker {
+  font-size: 24rpx;
+  color: var(--c-pink-deep);
+  margin-bottom: 10rpx;
+}
+
+.onboarding-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: 12rpx;
+}
+
+.onboarding-text {
+  font-size: 26rpx;
+  color: var(--c-text-2);
+  line-height: 1.6;
+}
+
+.onboarding-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 22rpx;
+}
+
+.onboarding-actions button {
+  flex: 1;
+  min-height: 64rpx;
+  border-radius: var(--r-pill);
+  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding-skip {
+  background: var(--c-quiet-bg);
+  color: var(--c-text-sub);
+}
+
+.onboarding-next {
+  background: var(--c-pink);
+  color: var(--c-ink);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--c-text);
+  margin-bottom: 24rpx;
+  margin-top: 24rpx;
+}
+
+.hero-card {
+  background: var(--c-hero);
+  background: radial-gradient(120% 90% at 20% 0%, var(--c-hero) 0%, var(--c-hero) 55%, var(--c-bg-soft) 100%);
+  border-radius: var(--r-card);
+  padding: 28rpx 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: var(--sh-near);
+  color: var(--c-hero-ink);
+}
+
+/* Solo 闂備緡鍘搁崑鎾绘偣閸パ冩Щ鐎?*/
+.invite-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx 24rpx;
+  box-shadow: var(--sh-raise);
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.invite-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: 12rpx;
+}
+
+.invite-desc {
+  font-size: 26rpx;
+  color: var(--c-text-sub);
+  line-height: 1.6;
+  margin-bottom: 24rpx;
+}
+
+.invite-btn {
+  width: 100%;
+  min-height: 76rpx;
+  border-radius: 999rpx;
+  background: var(--c-pink);
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invite-reset {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: var(--c-text-sub);
+  text-decoration: underline;
+}
+
+.space-tag {
+  display: inline-block;
+  font-size: 26rpx;
+  font-weight: bold;
+  color: var(--c-brand);                 /* 濠电儑缍€娴滎剛鈧?濠电儑缍€缁箖藝閸偅浜ら柟杈惧閹枫劑鏌ㄥ☉妯垮闁逛匠鍥ㄥ亱閻忕偛澧介崹濂告偣?*/
+  margin-bottom: 24rpx;
+}
+
+.hero-space {
+  flex: 0 0 auto;
+  max-width: 38%;
+  margin-bottom: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.hero-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.hero-head-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero-other {
+  flex: 1;
+  max-width: none;
+  min-width: 0;
+  padding-top: 2rpx;
+  text-align: left;
+}
+
+.hero-primary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 8rpx;
+}
+
+.hero-other-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--c-hero-deep);
+}
+
+.hero-other-mark {
+  margin-top: 0;
+  font-size: 34rpx;
+  line-height: 1;
+  color: var(--c-pink-deep);
+}
+
+.hero-days {
+  flex-basis: 100%;
+  font-size: 28rpx;
+  font-weight: 400;
+  color: var(--c-hero-mid);                 /* 缂備緡鍠栭ˇ顖滆姳閹惰棄绀夐柣妯虹－缁犳帒鈽夐幘顖氫壕濠碘剝顨愮紞鍥╂濠靛绠ユい鎰╁灩閻撳倿鏌涘Δ鍕彧闁?*/
+  margin-bottom: 16rpx;
+}
+
+.journal-hint {
+  margin-top: 8rpx;
+  padding: 32rpx;                 /* 闂?6px闂佹寧绋戦張顒勫几閸愵亖鍋撳☉娆嶄沪缂佹顦伴妵鍕箚閹殿喚褰?*/
+  border-radius: 20rpx;
+  background: rgba(255, 255, 255, 0.28);   /* 闂佸憡绋撻崢褔骞嗗☉姘勃闁稿本鑹惧В鍫熶繆?*/
+  box-shadow: inset 0 0 0 1rpx rgba(255, 255, 255, 0.35);
+  min-height: 96rpx;   /* 婵烇絽娲︾换鍡涙儊婢舵劖鍊烽柣鐔告緲濮ｅ﹪鏌?闂?48rpx */
+  box-sizing: border-box;
+}
+
+.journal-hint-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--c-pink-deep);                 /* 情感徽章主视觉 */
+  line-height: 1.7;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.journal-hint-empty {
+  padding: 32rpx;                 /* 闂佸憡鑹鹃張顒€螞閳哄啯濯奸柡澶嬵儥閸熷洭鏌涢敐搴ｅ帨缂佽鲸绻堝顒勫炊瑜忛幗鐔封槈閹惧磭效闁靛棗锕ュ?*/
+  min-height: 96rpx;
+}
+
+.journal-hint-empty .journal-hint-text {
+  font-size: 26rpx;
+  font-weight: 400;
+  color: var(--c-hero-deep);                 /* 濠电儑缍€娴滎剟鎯岄崶顒€纭€闁绘浜粔鎾偣閸ヨ泛寮跨紒杈ㄧ箘閸掓帗寰勬繝鍕孩闂佸憡鐟崹鐢割敋?*/
+  line-height: 1.6;
+}
+
+.mood-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;                  /* 缂備焦鐦遍崘銊︻仴婵炴垶鎸哥粔鐢稿汲鎼粹槅鍤曢柍?*/
+  margin-top: 20rpx;
+}
+
+.mood-empty {
+  font-size: 26rpx;
+  color: var(--c-text-sub);
+  margin-top: 20rpx;
+  line-height: 1.6;
+}
+
+.mood-picker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 20rpx;
+}
+
+.mood-tag {
+  font-size: 26rpx;
+  color: var(--c-pink-deep);        /* 濠电儑缍€娴滎剛鏁崸妤€妫橀柛銉戝懏鎲?*/
+  border: 2rpx solid var(--c-pink-deep); /* 缂備礁鑻幖顐ょ紦妤ｅ啯鏅慨姗嗗幘缁犳帡鏌ｅ搴′簽缂侇喖绻橀獮鎾圭疀濮樿京褰?*/
+  border-radius: var(--r-pill);
+  padding: 18rpx 30rpx;
+  min-height: 64rpx;     /* 婵烇絽娲︾换鍡涙儊婢舵劕鐭楁い鏍ㄧ矊娴狀垶鏌涢幋婵愮吋闁绘繍鍠楅幆?*/
+  display: inline-flex;
+  align-items: center;
+  background: transparent;           /* 闂傚倸瀚€氼剟鎯堝Ο鑽も攳闁斥晛鍟╃槐鏍煥濞戞ê顨欑紒妤€顦甸獮搴ㄥ閳ュ磭浜?*/
+  font-weight: 400;
+}
+
+/* 闂佹悶鍎抽崑娑氳姳閺屻儱妫橀柣鐔稿婵″洭鏌熼姘殗闁逞屽墮椤︽壆鈧哎鍔戝畷鎶解€﹂幒鏃傜崶闂佸搫绉村ú銊╊敆妞嬪孩顫曠憸宥夊闯妤ｅ啯鏅悘鐐跺亹缁犱粙鏌熼梹鎰樂閻炴俺浜幃鏉跨暆鐎ｎ剛顦梺缁樺姉閹虫捇宕甸鈧畷鐘虫姜閹殿喚鎲规繛杈剧到缁ㄨ偐鑺遍鍕唨闁搞儜鍐╃彲 48rpx */
+.mood-picker .mood-tag {
+  box-sizing: border-box;
+  width: 100%;
+  height: 72rpx;
+  padding: 8rpx 10rpx;
+  font-size: 22rpx;
+  min-height: 72rpx;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.35;
+}
+.mood-picker .mood-custom {
+  padding: 8rpx 10rpx;
+  font-size: 22rpx;
+  min-height: 72rpx;
+  color: var(--c-text-sub);
+}
+/* 閻庢鍠楀ú鏍敋闁秴妫橀柣鐔稿婵″洭鏌熼姘櫣闁活偄绉剁划鍫ユ偖鐎靛摜鐛ョ紓浣歌嫰閹碱偆缂撴ィ鍐┾挃闁告洦鍋嗗锝吳庨崶锝呭⒉濞寸厧鎳橀弫宥囦沪閼测晩浼囬柣鐐寸☉閺堫剙螣婢跺瞼鐭?*/
+.mood-display .mood-tag {
+  padding: 10rpx 18rpx;
+  font-size: 24rpx;
+  min-height: 48rpx;
+}
+
+.mood-active {
+  background: var(--c-pink-light);
+  box-shadow: inset 0 0 0 4rpx var(--c-pink-deep);  /* 濠电儑缍€娴滎剛鏁崸妤€绀冮柛娑欏閻濊埖淇婂Δ鈧Λ瀵告濠靛鐒诲璺侯槼閸橆剛鈧鍣ｇ紓姘舵儍閻斿摜鈹嶆繝闈涚墛濞?*/
+  color: var(--c-pink-deep);
+  font-weight: 500;
+}
+
+.mood-custom {
+  color: var(--c-text-sub);
+  border-color: var(--c-pink-deep);
+  background: transparent;
+}
+
+.mood-custom-input-area {
+  width: 100%;
+  margin-top: 24rpx;
+}
+
+.mood-picker .mood-custom-input-area {
+  grid-column: 1 / -1;
+}
+
+.mood-custom-input {
+  width: 100%;
+  padding: 24rpx;
+  border: 2rpx solid var(--c-line);
+  border-radius: var(--r-card);
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+  box-sizing: border-box;
+  background: var(--c-ink);
+}
+
+.ghost-btn {
+  width: 100%;
+  min-height: 72rpx;
+  border-radius: var(--r-pill);
+  border: 2rpx solid var(--c-line);
+  color: var(--c-text-sub);
+  font-size: 28rpx;
+  margin-top: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.primary-btn {
+  width: 100%;
+  min-height: 72rpx;
+  border-radius: var(--r-pill);
+  background: var(--c-pink);
+  color: #ffffff;
+  font-size: 28rpx;
+  margin-top: 40rpx;              /* 婵炴垶鎸告鍝ョ紦妤ｅ啫绠氶柛娑卞枤閸ㄨ偐绱掑☉妯衡挃闁稿繈鍨介獮蹇斿緞婵犲嫮锛涢梺鎸庣☉閻偐鈧凹鍘剧划鈺冣偓锝庡弾閺€浠嬫煕閺傝濡奸柛娆忔瀹?*/
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-hover {
+  background: var(--c-pink-deep);
+  opacity: 0.9;
+}
+
+.t-hover {
+  opacity: 0.72;
+}
+
+.reminder-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.reminder-btn {
+  flex: 1;
+  padding: 16rpx 0;
+  border: 2rpx solid var(--c-pink);
+  border-radius: var(--r-pill);
+  font-size: 26rpx;
+  color: var(--c-pink);
+  min-height: 72rpx;
+}
+
+.reminder-btn.ghost {
+  border-color: var(--c-line);
+  color: var(--c-text-sub);
+}
+
+.card {
+  border-radius: var(--r-card);
+  background: var(--c-card);
+  box-shadow: var(--sh-raise);
+}
+
+.summary-row {
+  display: flex;
+  padding: 16rpx 12rpx;
+  gap: 2rpx;
+  margin-bottom: 24rpx;
+  background: var(--c-card-active);
+  border-radius: var(--r-card);
+  box-shadow: var(--sh-near);
+}
+
+.summary-inline {
+  padding: 8rpx 0;
+  margin-bottom: 24rpx;
+  background: transparent;
+  box-shadow: none;
+}
+
+.summary-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12rpx 0;
+  gap: 8rpx;
+  border-right: 2rpx solid var(--c-line);
+}
+
+.summary-item:last-child {
+  border-right: none;
+}
+
+.summary-num {
+  font-size: 36rpx;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--c-pink-deep);
+}
+
+.summary-zero {
+  opacity: 0.5;
+}
+
+.summary-label {
+  font-size: 22rpx;
+  color: var(--c-text-sub);
+}
+
+.empty {
+  font-size: 26rpx;
+  color: var(--c-text-sub);
+  line-height: 1.6;
+  padding: 36rpx 0;
+}
+
+.item {
+  border: 2rpx solid var(--c-line);
+  border-radius: var(--r-card);
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  background: var(--c-card);
+  box-shadow: var(--sh-raise);
+}
+
+.item-text {
+  font-size: 28rpx;
+  color: var(--c-text);
+  margin-bottom: 8rpx;
+}
+
+.item-state {
+  font-size: 24rpx;
+  color: var(--c-tag-text);
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  border-radius: var(--r-pill);
+  background: var(--c-pink-light);
+}
+
+.today-card {
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  border: 2rpx solid var(--c-pink-light);
+}
+
+.today-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: 16rpx;
+}
+
+.today-text,
+.today-trace-text,
+.today-callout-text {
+  font-size: 24rpx;
+  color: var(--c-text-2);
+  line-height: 1.55;
+}
+
+.today-anniversary,
+.today-festival {
+  margin-bottom: 16rpx;
+}
+
+.today-trace,
+.today-callout {
+  position: relative;
+  padding: 14rpx 36rpx 14rpx 0;
+  border-top: 2rpx solid var(--c-line-soft);
+}
+
+.today-trace-label,
+.today-callout-label {
+  font-size: 22rpx;
+  color: var(--c-pink-deep);
+  margin-bottom: 4rpx;
+}
+
+.today-trace-arrow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32rpx;
+  color: var(--c-muted-pink);
+}

@@ -1,0 +1,33 @@
+<view class="page {{themeClass}}">
+  <view class="page-title">{{copy.vocabulary.diary}}</view>
+
+  <view class="reply-context" wx:if="{{replyMood}}">
+    <view class="reply-context-title">回应 TA 的心情</view>
+    <view class="reply-context-tags">
+      <view class="mood-tag" wx:for="{{replyMoodTags}}" wx:key="index">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="write-card">
+    <textarea class="write-input" maxlength="200" placeholder="{{copy.diary.placeholder}}" value="{{input}}" bindinput="onInput" />
+    <button class="primary-btn" bindtap="onSubmit">{{copy.diary.submit}}</button>
+  </view>
+
+  <view class="section-title">{{mySectionTitle}}</view>
+  <view class="diary-group diary-mine">
+    <view class="diary-entry" wx:for="{{myEntries}}" wx:key="index">
+      <view class="entry-content">{{item.text}}</view>
+      <view class="entry-time">{{item.time}}</view>
+    </view>
+  </view>
+  <view class="entry-empty" wx:if="{{!myEntries.length}}">{{myEmptyText}}</view>
+
+  <view class="section-title">{{oppositeSectionTitle}}</view>
+  <view class="diary-group diary-theirs">
+    <view class="diary-entry" wx:for="{{oppositeEntries}}" wx:key="index">
+      <view class="entry-content">{{item.text}}</view>
+      <view class="entry-time">{{item.time}}</view>
+    </view>
+  </view>
+  <view class="entry-empty" wx:if="{{!oppositeEntries.length}}">{{oppositeEmptyText}}</view>
+</view>

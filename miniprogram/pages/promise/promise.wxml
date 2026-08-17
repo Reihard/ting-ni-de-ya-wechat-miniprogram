@@ -1,0 +1,28 @@
+<view class="page {{themeClass}}">
+  <view class="hero-card">
+    <view class="hero-title">{{copy.vocabulary.promise}}</view>
+    <view class="hero-subtitle">{{copy.promise.subtitle}}</view>
+  </view>
+
+  <view class="form-card">
+    <view class="section-title">{{copy.promise.titleLabel}}</view>
+    <input class="input" maxlength="15" placeholder-class="input-placeholder" placeholder="例如：今天拍一张可爱自拍给我" value="{{title}}" bindinput="onTitleInput" />
+
+    <view class="section-title">补充一句</view>
+    <textarea class="textarea" maxlength="30" placeholder-class="input-placeholder" placeholder="例如：今天想认真收到你的回应和记录" value="{{description}}" bindinput="onDescInput" />
+
+    <view class="section-title">希望怎样完成</view>
+    <radio-group bindchange="selectWay">
+      <label class="way-tag {{way === '文字约定' ? 'way-tag-on' : ''}}">
+        <radio value="文字约定" checked="{{way === '文字约定'}}" />
+        <text>文字约定</text>
+      </label>
+    </radio-group>
+
+
+    <view class="section-title">{{copy.vocabulary.score}}</view>
+    <input class="input" type="number" placeholder-class="input-placeholder" placeholder="0-50分" value="{{score}}" bindinput="onScoreInput" />
+
+    <button class="primary-btn" bindtap="onSubmit" disabled="{{submitting}}">{{copy.promise.submit}}</button>
+  </view>
+</view>

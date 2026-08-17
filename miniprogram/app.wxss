@@ -1,0 +1,152 @@
+/**app.wxss**/
+page {
+  --c-bg: #fff7f3;
+  --c-card: #ffffff;
+  --c-text: #4b3940;
+  --c-text-2: #684f58;
+  --c-text-sub: #9b858b;
+  --c-text-deep: #7d5a63;
+  --c-quiet: #8a7077;
+  --c-muted: var(--c-text-sub);
+  --c-line: #f3c6d2;
+  --c-line-deep: #d8b9c0;
+  --c-line-soft: #eadbe0;
+  --c-quiet-bg: #f5ecef;
+  --c-bg-soft: #f7f2f3;
+  --c-card-active: #fff3f6;
+  --c-ink: #fff8fa;
+  --c-tint: #fff0f4;
+  --c-placeholder: #aa9299;
+
+  /* pink 5-tier: 900深 / deep深玫 / pink主 / tag-text中粉字 / pink-light浅 */
+  --c-pink-900: #9c3d53;
+  --c-pink-deep: #d45774;
+  --c-pink: #e46784;
+  --c-tag-text: #cb5f79;
+  --c-pink-light: #ffe8ee;
+
+  --c-brand: #6e2b3a;
+  --c-hero: #ffd7dd;
+
+  /* muted gray-pink (arrows / subtle lines) */
+  --c-muted-pink: #c58b99;
+
+  /* text on hero / emphasis */
+  --c-hero-ink: #2f2227;
+  --c-hero-deep: #9c3d53;
+  --c-hero-mid: #c98b9d;
+
+  --r-card: 24rpx;
+  --r-pill: 999rpx;
+
+  /* shadow two-tier */
+  --sh-near: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  --sh-raise: 0 10rpx 30rpx rgba(228, 103, 132, 0.08);
+  --sh-press: 0 6rpx 16rpx rgba(228, 103, 132, 0.18);
+
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+
+/* 角色主题：沿用同一套布局，仅替换视觉气质。回应方沿用默认暖粉。 */
+.theme-guide {
+  background: var(--c-bg);
+  color: var(--c-text);
+  --c-bg: #f2f4f7;
+  --c-card: #ffffff;
+  --c-text: #2d3743;
+  --c-text-2: #596979;
+  --c-text-sub: #8793a2;
+  --c-text-deep: #384b5e;
+  --c-quiet: #718092;
+  --c-muted: #8793a2;
+  --c-line: #d4dde5;
+  --c-line-deep: #bcc8d4;
+  --c-line-soft: #e7edf2;
+  --c-quiet-bg: #eef2f5;
+  --c-bg-soft: #f7f9fb;
+  --c-card-active: #eef3f7;
+  --c-ink: #f7fafc;
+  --c-tint: #e7edf2;
+  --c-placeholder: #9aa6b4;
+  --c-pink-900: #384b5e;
+  --c-pink-deep: #52687d;
+  --c-pink: #52687d;
+  --c-tag-text: #52687d;
+  --c-pink-light: #e7edf2;
+  --c-brand: #384b5e;
+  --c-hero: #d7e0e8;
+  --c-muted-pink: #8ca0b3;
+  --c-hero-ink: #2d3743;
+  --c-hero-deep: #52687d;
+  --c-hero-mid: #8297aa;
+  --sh-near: 0 4rpx 12rpx rgba(45, 55, 67, 0.08);
+  --sh-raise: 0 10rpx 30rpx rgba(45, 55, 67, 0.08);
+  --sh-press: 0 6rpx 16rpx rgba(45, 55, 67, 0.16);
+}
+
+.theme-guide-forest,
+.theme-guide-umber,
+.theme-respond-lilac,
+.theme-respond-apricot {
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+
+.theme-guide-forest {
+  --c-bg: #f1f5f2; --c-text: #30413a; --c-text-2: #5d7168; --c-text-sub: #879991;
+  --c-text-deep: #3f5a4f; --c-line: #d5e1da; --c-line-deep: #bdcec3; --c-line-soft: #e5eee8;
+  --c-quiet-bg: #edf3ef; --c-bg-soft: #f7faf8; --c-card-active: #edf4ef; --c-tint: #e5eee8;
+  --c-pink-900: #39584a; --c-pink-deep: #567666; --c-pink: #668878; --c-tag-text: #567666;
+  --c-pink-light: #e2eee6; --c-brand: #39584a; --c-hero: #d7e5dc; --c-muted-pink: #88a294;
+  --c-hero-ink: #30413a; --c-hero-deep: #4d6b5b; --c-hero-mid: #839b8c;
+  --sh-near: 0 4rpx 12rpx rgba(48, 65, 58, .08); --sh-raise: 0 10rpx 30rpx rgba(48, 65, 58, .08);
+}
+
+.theme-guide-umber {
+  --c-bg: #f6f3f0; --c-text: #453a35; --c-text-2: #6f5d53; --c-text-sub: #9a8780;
+  --c-text-deep: #624c40; --c-line: #e5d9d1; --c-line-deep: #d2bfb4; --c-line-soft: #efe7e2;
+  --c-quiet-bg: #f2ece8; --c-bg-soft: #faf7f5; --c-card-active: #f5eeea; --c-tint: #eee3dc;
+  --c-pink-900: #64483b; --c-pink-deep: #8a6654; --c-pink: #a87868; --c-tag-text: #805d4d;
+  --c-pink-light: #f1e2da; --c-brand: #64483b; --c-hero: #eadbd1; --c-muted-pink: #b28f7f;
+  --c-hero-ink: #453a35; --c-hero-deep: #765747; --c-hero-mid: #aa8979;
+  --sh-near: 0 4rpx 12rpx rgba(69, 58, 53, .08); --sh-raise: 0 10rpx 30rpx rgba(69, 58, 53, .08);
+}
+
+.theme-respond-lilac {
+  --c-bg: #faf7fb; --c-text: #493e4d; --c-text-2: #705f78; --c-text-sub: #9b8aa1;
+  --c-text-deep: #6a4f74; --c-line: #eadfed; --c-line-deep: #d8c7dc; --c-line-soft: #f0e9f2;
+  --c-quiet-bg: #f4edf6; --c-bg-soft: #fcf9fd; --c-card-active: #f7eff9; --c-tint: #f0e4f3;
+  --c-pink-900: #76527f; --c-pink-deep: #a36fac; --c-pink: #b981c0; --c-tag-text: #9b68a5;
+  --c-pink-light: #f1e3f3; --c-brand: #76527f; --c-hero: #eadcf0; --c-muted-pink: #bd93c4;
+  --c-hero-ink: #493e4d; --c-hero-deep: #8d6096; --c-hero-mid: #b08bb8;
+  --sh-near: 0 4rpx 12rpx rgba(73, 62, 77, .08); --sh-raise: 0 10rpx 30rpx rgba(73, 62, 77, .08);
+}
+
+.theme-respond-apricot {
+  --c-bg: #fff8f1; --c-text: #4d4038; --c-text-2: #745d4e; --c-text-sub: #a28c7e;
+  --c-text-deep: #725340; --c-line: #f0ddca; --c-line-deep: #dfc4aa; --c-line-soft: #f5e9dd;
+  --c-quiet-bg: #fbf0e5; --c-bg-soft: #fffbf7; --c-card-active: #fff1e6; --c-tint: #fcebdd;
+  --c-pink-900: #8a5d3e; --c-pink-deep: #c47d4f; --c-pink: #d9955f; --c-tag-text: #b86f44;
+  --c-pink-light: #fbe6d4; --c-brand: #8a5d3e; --c-hero: #f5dfcc; --c-muted-pink: #d2a07b;
+  --c-hero-ink: #4d4038; --c-hero-deep: #a76c45; --c-hero-mid: #c99a73;
+  --sh-near: 0 4rpx 12rpx rgba(77, 64, 56, .08); --sh-raise: 0 10rpx 30rpx rgba(77, 64, 56, .08);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+} 
+
+button {
+  background: initial;
+}
+
+button:focus{
+  outline: 0;
+}
+
+button::after{
+  border: none;
+}

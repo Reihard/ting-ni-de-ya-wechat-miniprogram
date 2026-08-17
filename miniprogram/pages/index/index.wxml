@@ -1,0 +1,112 @@
+<wxs module="utils">
+function hasTag(list, tag) {
+  for (var i = 0; i < list.length; i++) {
+    if (list[i] === tag) return true;
+  }
+  return false;
+}
+module.exports = { hasTag: hasTag };
+</wxs>
+<view class="container {{themeClass}}">
+  <!-- Solo 邀请卡：solo 状态置顶显示 -->
+  <view class="invite-card" wx:if="{{pairingStatus === 'solo'}}">
+    <view class="invite-title">{{copy.home.inviteTitle}}</view>
+    <view class="invite-desc">{{copy.home.inviteDesc}}</view>
+    <button class="invite-btn" open-type="share">{{copy.home.inviteTitle}}</button>
+    <view class="invite-reset" hover-class="t-hover" bindtap="onGiveup">{{copy.home.inviteReset}}</view>
+  </view>
+
+  <view class="onboarding-card card" wx:if="{{onboardingVisible}}">
+    <view class="onboarding-kicker">{{copy.home.onboardingKicker}}</view>
+    <view class="onboarding-title">{{onboardingTitle}}</view>
+    <view class="onboarding-text">{{onboardingText}}</view>
+    <view class="onboarding-actions">
+      <button class="onboarding-skip" bindtap="skipOnboarding">{{copy.home.onboardingSkip}}</button>
+      <button class="onboarding-next" bindtap="nextOnboarding">{{onboardingLast ? copy.home.onboardingStart : copy.home.onboardingNext}}</button>
+    </view>
+  </view>
+
+  <view class="hero-card">
+    <view class="hero-head">
+      <view class="hero-other hero-primary">
+        <view class="hero-other-name">{{otherNickname || 'TA'}}</view>
+        <view class="hero-other-mark">♡</view>
+        <view class="hero-days" wx:if="{{daysTogether}}">❀ 我们在一起的第 {{daysTogether}} 天</view>
+      </view>
+      <view class="space-tag hero-space" wx:if="{{spaceName}}">{{spaceName}}</view>
+    </view>
+
+    <view class="journal-hint" wx:if="{{otherDiaryText.text}}" hover-class="t-hover" bindtap="goDiary">
+      <view class="journal-hint-text">{{otherDiaryText.text}}</view>
+    </view>
+    <view class="journal-hint journal-hint-empty" wx:elif="{{!otherDiaryText.text}}" hover-class="t-hover" bindtap="goDiary">
+      <view class="journal-hint-text">{{copy.home.journalEmpty}}</view>
+    </view>
+
+    <block wx:if="{{role === 'guide'}}">
+      <view class="mood-display" wx:if="{{hasMood}}" bindtap="replyMood">
+        <view class="mood-tag" wx:for="{{otherMoodTags}}" wx:key="index">{{item}}</view>
+      </view>
+      <view class="mood-empty" wx:else>{{moodEmptyText}}</view>
+    </block>
+    <block wx:else>
+<view class="mood-picker">
+        <view class="mood-tag {{utils.hasTag(selectedMood, item) ? 'mood-active' : ''}}" hover-class="t-hover" wx:for="{{moodTags}}" wx:key="index" data-tag="{{item}}" bindtap="onMoodTap">{{item}}</view>
+        <view class="mood-tag mood-custom" hover-class="t-hover" bindtap="toggleCustomMoodInput" wx:if="{{!showCustomMoodInput}}">{{copy.home.moodInput}}</view>
+        <view class="mood-custom-input-area" wx:if="{{showCustomMoodInput}}">
+          <input class="mood-custom-input" placeholder="{{copy.home.moodPlaceholder}}" maxlength="10" value="{{customMoodText}}" bindinput="onCustomMoodInput" />
+          <button class="primary-btn" hover-class="btn-hover" bindtap="submitCustomMood">{{copy.home.confirm}}</button>
+          <button class="ghost-btn" hover-class="t-hover" bindtap="toggleCustomMoodInput">{{copy.home.cancel}}</button>
+        </view>
+      </view>
+    </block>
+
+    <button class="primary-btn" hover-class="btn-hover" wx:if="{{role === 'guide'}}" bindtap="goPromise">{{copy.home.newPromise}}</button>
+    <button class="primary-btn" hover-class="btn-hover" wx:if="{{role === 'respond'}}" bindtap="goCards">{{copy.home.myCards}}</button>
+  </view>
+
+  <view class="summary-row summary-inline">
+    <view class="summary-item">
+      <view class="summary-num {{overview.pendingPromiseCount === 0 ? 'summary-zero' : ''}}">{{overview.pendingPromiseCount}}</view>
+      <view class="summary-label">{{copy.home.summaryPromise}}</view>
+    </view>
+    <view class="summary-item">
+      <view class="summary-num {{overview.pendingCardCount === 0 ? 'summary-zero' : ''}}">{{overview.pendingCardCount}}</view>
+      <view class="summary-label">{{copy.home.summaryCard}}</view>
+    </view>
+    <view class="summary-item">
+      <view class="summary-num {{overview.todayJournalCount === 0 ? 'summary-zero' : ''}}">{{overview.todayJournalCount}}</view>
+      <view class="summary-label">{{copy.home.summaryDiary}}</view>
+    </view>
+    <view class="summary-item">
+      <view class="summary-num {{overview.anniversaryCount === 0 ? 'summary-zero' : ''}}">{{overview.anniversaryCount}}</view>
+      <view class="summary-label">{{copy.home.summaryDays}}</view>
+    </view>
+  </view>
+
+  <view class="today-card card" wx:if="{{todayCardVisible}}">
+    <view class="today-title">{{todayTitle || copy.home.todayTitle}}</view>
+    <view class="today-anniversary" wx:if="{{annReminder.shown}}">
+      <view class="today-text">今天是你们的「{{annReminder.name}}」。一起走过的 {{annReminder.days}} 天，已经变成很多值得珍藏的小事。</view>
+      <view class="reminder-actions">
+        <button class="reminder-btn" bindtap="onAnniversaryGrant">{{copy.home.anniversaryGrant}}</button>
+        <button class="reminder-btn ghost" bindtap="onAnniversaryRemember">今天先记着</button>
+      </view>
+    </view>
+    <view class="today-festival" wx:if="{{festivalReminder.shown}}">
+      <view class="today-text" wx:for="{{festivalReminder.texts}}" wx:key="index">{{item}}</view>
+    </view>
+    <view class="today-callout" wx:if="{{callout.threadId}}" data-tid="{{callout.threadId}}" bindtap="onTapCallout">
+      <view class="today-callout-label">{{copy.home.waitingReply}}</view>
+      <view class="today-callout-text">{{callout.text}}</view>
+      <view class="today-trace-arrow">›</view>
+    </view>
+  </view>
+
+  <view class="section-title" wx:if="{{!empty}}">{{copy.home.recentTitle}}</view>
+  <view class="item" wx:for="{{ongoing}}" wx:key="threadId" data-tid="{{item.threadId}}" bindtap="goDetail">
+    <view class="item-text">{{item.text}}</view>
+    <view class="item-state">{{item.state}}</view>
+  </view>
+
+</view>

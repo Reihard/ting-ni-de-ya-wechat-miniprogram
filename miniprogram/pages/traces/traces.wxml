@@ -1,0 +1,47 @@
+<view class="page {{themeClass}}">
+  <view class="hero-card">
+    <view class="hero-title">{{copy.vocabulary.traces}}</view>
+    <view class="hero-subtitle">{{copy.traces.subtitle}}</view>
+  </view>
+
+  <view class="filter-row">
+    <view class="filter-tab {{filter === 'all' ? 'filter-on' : ''}}" data-key="all" bindtap="setFilter">{{copy.traces.all}}</view>
+    <view class="filter-tab {{filter === 'promise' ? 'filter-on' : ''}}" data-key="promise" bindtap="setFilter">{{copy.vocabulary.promise}}</view>
+    <view class="filter-tab {{filter === 'card' ? 'filter-on' : ''}}" data-key="card" bindtap="setFilter">{{copy.vocabulary.card}}</view>
+    <view class="filter-tab {{filter === 'journal' ? 'filter-on' : ''}}" data-key="journal" bindtap="setFilter">{{copy.vocabulary.diary}}</view>
+    <view class="filter-tab {{filter === 'mood' ? 'filter-on' : ''}}" data-key="mood" bindtap="setFilter">{{copy.vocabulary.mood}}</view>
+  </view>
+
+  <view class="timeline">
+    <view wx:if="{{groups.length}}">
+      <view wx:for="{{groups}}" wx:for-item="group" wx:key="dateKey" class="trace-date-group">
+        <view class="trace-date">{{group.dateLabel}}</view>
+        <view class="trace-lane">
+          <view wx:for="{{group.groups}}" wx:for-item="eventGroup" wx:key="groupKey" class="timeline-item {{eventGroup.categoryClass}}">
+            <view class="timeline-dot"></view>
+            <view class="timeline-card">
+              <view class="item-head">
+                <text class="item-type-chip">{{eventGroup.categoryLabel}}</text>
+                <text class="item-meta">{{eventGroup.lastTime}}</text>
+              </view>
+              <view class="item-thread-title" wx:if="{{eventGroup.title}}">{{eventGroup.title}}</view>
+              <view class="item-result" wx:if="{{eventGroup.result}}">{{eventGroup.result}}</view>
+              <view class="event-steps">
+                <view wx:for="{{eventGroup.steps}}" wx:for-item="step" wx:key="eventId" class="event-step">
+                  <view class="event-step-head"><text class="event-step-time">{{step.timeOnly}}</text><text class="event-step-label">{{step.typeLabel}}</text></view>
+                  <view class="event-step-quote" wx:if="{{step.replyMoodText}}">{{copy.traces.replyMoodPrefix}}{{step.replyMoodText}}<text wx:if="{{step.content}}">；{{step.content}}</text></view>
+                  <view class="event-step-quote" wx:elif="{{step.content}}">{{step.content}}</view>
+                  <view class="event-step-meta">{{step.actorName}}</view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty">
+      <view class="empty-title">{{emptyTitle}}</view>
+      <view wx:if="{{emptyText}}" class="empty-text">{{emptyText}}</view>
+    </view>
+  </view>
+</view>

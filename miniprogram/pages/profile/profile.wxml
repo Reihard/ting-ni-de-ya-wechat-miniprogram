@@ -1,0 +1,97 @@
+<view class="page {{themeClass}}">
+  <view class="hero-card">
+    <view class="hero-top">
+      <view class="hero-title">{{copy.profile.title}}</view>
+      <view class="hero-score hero-score-readonly" wx:if="{{role !== 'respond'}}">{{copy.profile.guideScore}} · {{score}}</view>
+      <view class="hero-score" wx:else bindtap="goLedger">{{score}} {{copy.profile.respondScoreSuffix}}</view>
+    </view>
+    <view class="hero-text">{{copy.profileHero.text}}</view>
+  </view>
+
+  <view class="hero-foot" bindtap="onVersionTap">
+    <view class="hero-slogan"><text class="quote-mark">❛</text>{{copy.profileHero.slogan}}<text class="quote-mark">❜</text></view>
+    <view class="hero-version">v{{version}}</view>
+  </view>
+
+  <view class="version-menu" wx:if="{{versionMenuVisible}}">
+    <view class="version-menu-title">要走了吗</view>
+    <view class="version-menu-desc">{{copy.profile.disbandIntro}}</view>
+    <button class="version-menu-btn version-menu-primary" data-action="backup" bindtap="chooseVersionAction">去备份</button>
+    <view class="version-menu-secondary-text" data-action="disband" bindtap="chooseVersionAction">仍要解除空间</view>
+    <view class="version-menu-cancel" data-action="cancel" bindtap="chooseVersionAction">取消</view>
+  </view>
+
+  <view class="menu-card" bindtap="goAnniversary">
+    <view class="icon-entry">
+      <view class="entry-icon">♡</view>
+      <view class="entry-body">
+        <view class="entry-title">{{copy.profile.anniversary}}</view>
+        <view class="entry-subtitle">{{copy.profile.anniversarySubtitle}}</view>
+      </view>
+      <view class="entry-arrow">›</view>
+    </view>
+  </view>
+
+  <view class="menu-card" wx:if="{{role === 'guide'}}" bindtap="goCards">
+    <view class="icon-entry">
+      <view class="entry-icon">♡</view>
+      <view class="entry-body">
+        <view class="entry-title">{{copy.profile.guideCards}}</view>
+        <view class="entry-subtitle">{{copy.profile.guideCardsSubtitle}}</view>
+      </view>
+      <view class="entry-arrow">›</view>
+    </view>
+  </view>
+
+  <view class="menu-card" bindtap="goMemories">
+    <view class="icon-entry">
+      <view class="entry-icon">🕯</view>
+      <view class="entry-body">
+        <view class="entry-title">{{copy.profile.memories}}</view>
+        <view class="entry-subtitle">{{copy.profile.memoriesSubtitle}}</view>
+      </view>
+      <view class="entry-arrow">›</view>
+    </view>
+  </view>
+
+  <view class="menu-card" bindtap="onThemeTap">
+    <view class="icon-entry">
+      <view class="entry-icon">✦</view>
+      <view class="entry-body">
+        <view class="entry-title">{{copy.profile.theme}}</view>
+        <view class="entry-subtitle">{{themeName}} · {{copy.profile.localOnly}}</view>
+      </view>
+      <view class="entry-arrow">›</view>
+    </view>
+  </view>
+  <view class="choice-panel" wx:if="{{themePickerVisible}}">
+      <view class="choice-panel-title">{{copy.profile.themeChoose}}</view>
+    <view class="choice-card {{item.key}} {{themeClass === item.key ? 'choice-card-current' : ''}}" wx:for="{{themeOptions}}" wx:key="key" data-index="{{index}}" bindtap="selectTheme">
+      <view class="choice-card-title">{{item.name}}</view>
+      <view class="choice-card-desc">{{copy.profile.themeDesc}}</view>
+      <view class="choice-card-state">{{themeClass === item.key ? copy.profile.selected : copy.profile.choose}}</view>
+    </view>
+  </view>
+
+  <view class="menu-card" bindtap="onCopyTap">
+    <view class="icon-entry">
+      <view class="entry-icon">✧</view>
+      <view class="entry-body">
+        <view class="entry-title">{{copy.profile.copyPack}}</view>
+        <view class="entry-subtitle">{{copyPackName}} · {{copy.profile.copyPackSubtitle}}</view>
+      </view>
+      <view class="entry-arrow">›</view>
+    </view>
+  </view>
+  <view class="choice-panel" wx:if="{{copyPickerVisible}}">
+      <view class="choice-panel-title">{{copy.profile.copyChoose}}</view>
+    <view class="choice-card tone-choice {{copyPackName === item.name ? 'choice-card-current' : ''}}" wx:for="{{copyOptions}}" wx:key="id" data-index="{{index}}" bindtap="selectCopy">
+      <view class="choice-card-title">{{item.name}}</view>
+      <view class="choice-card-desc">{{item.desc}}</view>
+      <view class="choice-card-state">{{copyPackName === item.name ? copy.profile.copyUsed : copy.profile.copyUse}}</view>
+    </view>
+    <view class="copy-local-actions" wx:if="{{hasImportedCopy}}">
+      <button class="ghost-btn" bindtap="restoreGentle">{{copy.profile.restoreGentle}}</button>
+    </view>
+  </view>
+</view>

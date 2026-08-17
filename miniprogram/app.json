@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/traces/traces",
+    "pages/profile/profile",
+    "pages/pair/pair",
+    "pages/promise/promise",
+    "pages/detail/detail",
+    "pages/ledger/ledger",
+    "pages/cards/cards",
+    "pages/diary/diary",
+    "pages/anniversary/anniversary",
+    "pages/memories/memories"
+  ],
+  "window": {
+    "backgroundColor": "#fff7f3",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#ffd7dd",
+    "navigationBarTitleText": "听你的呀",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#9b858b",
+    "selectedColor": "#e46784",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "今日"
+      },
+      {
+        "pagePath": "pages/traces/traces",
+        "text": "印记"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我们"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

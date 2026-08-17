@@ -1,0 +1,159 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 24rpx;
+}
+
+.page-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: 24rpx;
+}
+
+.ann-item {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: var(--sh-raise);
+}
+
+.ann-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.ann-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--c-text);
+}
+
+.ann-cycle-tag {
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  background: var(--c-pink-light);
+  color: var(--c-tag-text);
+}
+
+.ann-elapsed {
+  font-size: 26rpx;
+  color: var(--c-text-2);
+  margin-bottom: 6rpx;
+}
+
+.ann-next {
+  font-size: 26rpx;
+  color: var(--c-tag-text);
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+
+.ann-del {
+  font-size: 24rpx;
+  color: var(--c-text-sub);
+  text-align: right;
+  padding: 8rpx 0;
+}
+
+.ann-empty {
+  font-size: 24rpx;
+  color: var(--c-text-sub);
+  padding: 40rpx 0;
+  text-align: center;
+}
+
+.add-btn-wrap {
+  margin-top: 8rpx;
+}
+
+.add-btn {
+  width: 100%;
+  min-height: 72rpx;
+  border-radius: 999rpx;
+  background: var(--c-pink);
+  color: #ffffff;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  margin-top: 24rpx;
+  box-shadow: var(--sh-raise);
+}
+
+.form-section {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: 16rpx;
+  margin-top: 20rpx;
+}
+
+.form-section:first-of-type {
+  margin-top: 0;
+}
+
+.input {
+  width: 100%;
+  min-height: 88rpx;
+  background: var(--c-ink);
+  border: none;
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx;
+  box-sizing: border-box;
+  font-size: 26rpx;
+  color: var(--c-text);
+  margin-bottom: 20rpx;
+  line-height: 1.5;
+}
+
+.picker-input {
+  display: flex;
+  align-items: center;
+}
+
+.placeholder {
+  color: var(--c-placeholder);
+  font-size: 24rpx;
+}
+
+.cycle-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 22rpx;
+  border-radius: 999rpx;
+  background: var(--c-pink-light);
+  color: var(--c-tag-text);
+  font-size: 26rpx;
+  margin: 0 12rpx 12rpx 0;
+}
+
+.cycle-tag-on {
+  background: var(--c-pink);
+  color: #ffffff;
+}
+
+.primary-btn {
+  width: 100%;
+  min-height: 72rpx;
+  border-radius: 999rpx;
+  background: var(--c-pink);
+  color: #ffffff;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24rpx;
+}

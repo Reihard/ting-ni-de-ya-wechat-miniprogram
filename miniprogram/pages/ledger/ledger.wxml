@@ -1,0 +1,18 @@
+<view class="page {{themeClass}}">
+  <view class="page-title"><text class="ledger-heart">♡</text> {{copy.vocabulary.ledger}}</view>
+  <view class="page-subtitle">{{copy.ledger.subtitle}}</view>
+
+  <view class="ledger-list">
+    <view wx:if="{{rows.length}}">
+      <view class="ledger-item" wx:for="{{rows}}" wx:key="index">
+        <view class="ledger-head">
+          <view class="ledger-label">{{item.label}}</view>
+          <view class="ledger-amount {{item.amount < 0 ? 'ledger-amount-minus' : 'ledger-amount-plus'}}">{{item.amount < 0 ? '−' : '+'}}{{item.amountText}} 分</view>
+        </view>
+        <view class="ledger-title">{{item.title}}</view>
+        <view class="ledger-date">{{item.date}}</view>
+      </view>
+    </view>
+    <view wx:else class="ledger-empty">{{copy.ledger.empty}}</view>
+  </view>
+</view>
