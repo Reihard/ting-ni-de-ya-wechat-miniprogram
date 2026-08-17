@@ -1,4 +1,4 @@
-{
+{"type":"copy_pack","copyPack":{
   "id": "dog_v1",
   "name": "犬奴示例",
   "version": 1,
@@ -69,4 +69,4 @@
     "customGuideSubtitle": "写下愿意为 TA 做的事情，等 TA 用服从分领取。",
     "customRespondSubtitle": "写下希望 TA 为你做的事情，等待确认。"
   }
-}
+}}
