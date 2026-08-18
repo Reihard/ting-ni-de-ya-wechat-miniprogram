@@ -15,7 +15,7 @@
       <textarea class="action-input" maxlength="50" placeholder="{{copy.detail.inputPlaceholder}}" value="{{inputText}}" bindinput="onInputText" />
     </view>
     <view class="action-buttons" wx:if="{{actions.length}}">
-      <button class="action-btn" wx:for="{{actions}}" wx:key="key" data-key="{{item.key}}" bindtap="onTapAction">{{item.label}}</button>
+      <button class="action-btn" wx:for="{{actions}}" wx:key="key" data-key="{{item.key}}" bindtap="onTapAction" loading="{{loading || redeeming}}" disabled="{{loading || redeeming}}">{{item.label}}</button>
     </view>
   </view>
 
@@ -29,8 +29,8 @@
     <view class="form-section">{{copy.detail.reviseReason}}</view>
     <textarea class="textarea" maxlength="50" value="{{editReason}}" bindinput="onEditReasonInput" />
 
-    <button class="action-btn" bindtap="onSubmitEdit">{{copy.detail.confirmEdit}}</button>
-    <button class="action-btn ghost" bindtap="onCancelEdit">{{copy.detail.cancelEdit}}</button>
+    <button class="action-btn" bindtap="onSubmitEdit" loading="{{editSubmitting}}" disabled="{{editSubmitting}}">{{copy.detail.confirmEdit}}</button>
+    <button class="action-btn ghost" bindtap="onCancelEdit" disabled="{{editSubmitting}}">{{copy.detail.cancelEdit}}</button>
   </view>
 
   <!-- 心意卡编辑区：分值 + 理由 -->
@@ -39,8 +39,8 @@
     <input class="input" type="number" value="{{editScore}}" bindinput="onEditScoreInput" />
     <view class="form-section">{{copy.detail.reasonOptional}}</view>
     <textarea class="textarea" maxlength="50" value="{{editReason}}" bindinput="onEditReasonInput" />
-    <button class="action-btn" bindtap="onSubmitCardEdit">确认</button>
-    <button class="action-btn ghost" bindtap="onCancelEdit">取消</button>
+    <button class="action-btn" bindtap="onSubmitCardEdit" loading="{{editSubmitting}}" disabled="{{editSubmitting}}">确认</button>
+    <button class="action-btn ghost" bindtap="onCancelEdit" disabled="{{editSubmitting}}">取消</button>
   </view>
 
   <view class="soft-copy" wx:if="{{softCopy}}">{{softCopy}}</view>

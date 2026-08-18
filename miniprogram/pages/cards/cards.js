@@ -14,6 +14,8 @@ Page({
     customName: "",
     customDesc: "",
     customScore: "",
+    customSubmitting: false,
+    cardSubmitting: false,
     copy: app.getCopy(),
   },
 
@@ -153,6 +155,7 @@ Page({
   },
 
   async createCustom() {
+    if (this.data.customSubmitting) return;
     const name = this.data.customName.trim();
     const desc = this.data.customDesc.trim();
     const score = Number(this.data.customScore);
@@ -165,29 +168,39 @@ Page({
       return;
     }
     const cardType = `custom_${Date.now()}`;
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "appendEvent",
-        spaceId: app.globalData.spaceId,
-        kind: "card_activate",
-        type: "create",
-        cardType,
-        text: JSON.stringify({ name, desc }),
-        score,
-      },
-    });
-    const r = res.result || {};
-    if (!r.success) {
-      wx.showToast({ title: r.msg || GENTLE_V1.cards.retry, icon: "none" });
-      return;
+    this.setData({ customSubmitting: true, customVisible: false });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "appendEvent",
+          spaceId: app.globalData.spaceId,
+          kind: "card_activate",
+          type: "create",
+          cardType,
+          text: JSON.stringify({ name, desc }),
+          score,
+        },
+      });
+      const r = res.result || {};
+      if (!r.success) {
+        this.setData({ customVisible: true });
+        wx.showToast({ title: r.msg || GENTLE_V1.cards.retry, icon: "none" });
+        return;
+      }
+      this.setData({ customName: "", customDesc: "", customScore: "" });
+      wx.showToast({ title: GENTLE_V1.cards.saved, icon: "success" });
+      await this.loadCards();
+    } catch (e) {
+      this.setData({ customVisible: true });
+      wx.showToast({ title: GENTLE_V1.cards.retry, icon: "none" });
+    } finally {
+      this.setData({ customSubmitting: false });
     }
-    this.setData({ customVisible: false, customName: "", customDesc: "", customScore: "" });
-    wx.showToast({ title: GENTLE_V1.cards.saved, icon: "success" });
-    this.loadCards();
   },
 
   async createCustomRequest() {
+    if (this.data.customSubmitting) return;
     const name = this.data.customName.trim();
     const desc = this.data.customDesc.trim();
     const score = Number(this.data.customScore);
@@ -200,43 +213,55 @@ Page({
       return;
     }
     const cardType = `custom_${Date.now()}`;
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "appendEvent",
-        spaceId: app.globalData.spaceId,
-        kind: "card_activate",
-        type: "request",
-        cardType,
-        text: JSON.stringify({ name, desc }),
-        score,
-      },
-    });
-    const r = res.result || {};
-    if (!r.success) {
-      wx.showToast({ title: r.msg || GENTLE_V1.cards.retry, icon: "none" });
-      return;
+    this.setData({ customSubmitting: true, customVisible: false });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "appendEvent",
+          spaceId: app.globalData.spaceId,
+          kind: "card_activate",
+          type: "request",
+          cardType,
+          text: JSON.stringify({ name, desc }),
+          score,
+        },
+      });
+      const r = res.result || {};
+      if (!r.success) {
+        this.setData({ customVisible: true });
+        wx.showToast({ title: r.msg || GENTLE_V1.cards.retry, icon: "none" });
+        return;
+      }
+      this.setData({ customName: "", customDesc: "", customScore: "" });
+      wx.showToast({ title: GENTLE_V1.cards.sent, icon: "success" });
+      await this.loadCards();
+    } catch (e) {
+      this.setData({ customVisible: true });
+      wx.showToast({ title: GENTLE_V1.cards.retry, icon: "none" });
+    } finally {
+      this.setData({ customSubmitting: false });
     }
-    this.setData({ customVisible: false, customName: "", customDesc: "", customScore: "" });
-    wx.showToast({ title: GENTLE_V1.cards.sent, icon: "success" });
-    this.loadCards();
   },
 
   async onSubmitInput() {
+    if (this.data.cardSubmitting) return;
     const { inputCard, inputScore } = this.data;
     if (!inputScore) {
       wx.showToast({ title: GENTLE_V1.cards.fillScore, icon: "none" });
       return;
     }
-    await this.submit(inputCard, inputCard.indexOf("custom_") === 0 ? "request" : "offer", Number(inputScore));
     this.setData({ needInput: false });
+    const ok = await this.submit(inputCard, inputCard.indexOf("custom_") === 0 ? "request" : "offer", Number(inputScore));
+    if (!ok) this.setData({ needInput: true });
   },
 
   isLoading: false,
 
   async submit(card, type, score) {
-    if (this.isLoading) return;
+    if (this.isLoading || this.data.cardSubmitting) return false;
     this.isLoading = true;
+    this.setData({ cardSubmitting: true });
     const data = {
       action: "appendEvent",
       spaceId: app.globalData.spaceId,
@@ -245,13 +270,21 @@ Page({
       type: type === "offer" ? "initiate" : type,
     };
     if (score !== "" && score !== null) data.score = score;
-    const res = await wx.cloud.callFunction({ name: "loveApi", data });
-    const r = res.result || {};
-    if (r.success) {
-      this.loadCards();
-    } else {
+    try {
+      const res = await wx.cloud.callFunction({ name: "loveApi", data });
+      const r = res.result || {};
+      if (r.success) {
+        await this.loadCards();
+        return true;
+      }
       wx.showToast({ title: GENTLE_V1.cards.retry, icon: "none" });
+      return false;
+    } catch (e) {
+      wx.showToast({ title: GENTLE_V1.cards.retry, icon: "none" });
+      return false;
+    } finally {
+      this.isLoading = false;
+      this.setData({ cardSubmitting: false });
     }
-    this.isLoading = false;
   },
 });

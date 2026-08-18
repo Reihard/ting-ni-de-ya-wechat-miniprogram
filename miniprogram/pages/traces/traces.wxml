@@ -29,7 +29,10 @@
               <view class="event-steps">
                 <view wx:for="{{eventGroup.steps}}" wx:for-item="step" wx:key="eventId" class="event-step">
                   <view class="event-step-head"><text class="event-step-time">{{step.timeOnly}}</text><text class="event-step-label">{{step.typeLabel}}</text></view>
-                  <view class="event-step-quote" wx:if="{{step.replyMoodText}}">{{copy.traces.replyMoodPrefix}}{{step.replyMoodText}}<text wx:if="{{step.content}}">；{{step.content}}</text></view>
+                  <view class="event-step-quote reply-mood-quote" wx:if="{{step.replyMoodText}}">
+                    <view>{{copy.traces.replyMoodPrefix}}{{step.replyMoodText}}</view>
+                    <view wx:if="{{step.content}}" class="reply-mood-content">{{step.content}}</view>
+                  </view>
                   <view class="event-step-quote" wx:elif="{{step.content}}">{{step.content}}</view>
                   <view class="event-step-meta">{{step.actorName}}</view>
                 </view>

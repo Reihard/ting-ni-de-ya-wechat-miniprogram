@@ -66,6 +66,8 @@ Page({
     moodTags: MOOD_TAGS,
     selectedMood: [],
     moodPublishing: false,
+    anniversarySubmitting: false,
+    navigating: false,
     showCustomMoodInput: false,
     customMoodText: "",
     annReminder: { shown: false, name: "", days: 0 },
@@ -461,41 +463,62 @@ Page({
   },
 
   async onAnniversaryGrant() {
+    if (this.data.anniversarySubmitting) return;
     const { name } = this.data.annReminder;
     if (!name) return;
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "appendEvent",
-        spaceId: app.globalData.spaceId,
-        type: "anniversaryGrant",
-        text: name,
-      },
-    });
-    const r = res.result || {};
-    if (r.success) {
-      this.setData({ annReminder: { shown: false, name: "", days: 0 } });
-      wx.navigateTo({ url: "/pages/ledger/ledger" });
-    } else {
-      this.setData({ annReminder: { shown: false, name: "", days: 0 } });
+    const previous = this.data.annReminder;
+    this.setData({ anniversarySubmitting: true, annReminder: { shown: false, name: "", days: 0 } });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "appendEvent",
+          spaceId: app.globalData.spaceId,
+          type: "anniversaryGrant",
+          text: name,
+        },
+      });
+      const r = res.result || {};
+      if (r.success) {
+        wx.navigateTo({ url: "/pages/ledger/ledger" });
+      } else {
+        this.setData({ annReminder: previous });
+        wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+      }
+    } catch (e) {
+      this.setData({ annReminder: previous });
+      wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+    } finally {
+      this.setData({ anniversarySubmitting: false });
     }
   },
 
   async onAnniversaryRemember() {
+    if (this.data.anniversarySubmitting) return;
     const { name } = this.data.annReminder;
     if (!name) return;
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "appendEvent",
-        spaceId: app.globalData.spaceId,
-        type: "remember",
-        text: name,
-      },
-    });
-    const r = res.result || {};
-    if (r.success) {
-      this.setData({ annReminder: { shown: false, name: "", days: 0 } });
+    const previous = this.data.annReminder;
+    this.setData({ anniversarySubmitting: true, annReminder: { shown: false, name: "", days: 0 } });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "appendEvent",
+          spaceId: app.globalData.spaceId,
+          type: "remember",
+          text: name,
+        },
+      });
+      const r = res.result || {};
+      if (!r.success) {
+        this.setData({ annReminder: previous });
+        wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+      }
+    } catch (e) {
+      this.setData({ annReminder: previous });
+      wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+    } finally {
+      this.setData({ anniversarySubmitting: false });
     }
   },
 
@@ -594,21 +617,26 @@ Page({
     const selected = this.data.selectedMood;
     if (!selected.length) return;
     this.setData({ moodPublishing: true });
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "appendEvent",
-        spaceId: app.globalData.spaceId,
-        kind: "none",
-        type: "mood",
-        moodTags: selected,
-      },
-    });
-    const r = res.result || {};
-    if (!r.success) {
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "appendEvent",
+          spaceId: app.globalData.spaceId,
+          kind: "none",
+          type: "mood",
+          moodTags: selected,
+        },
+      });
+      const r = res.result || {};
+      if (!r.success) {
+        wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+      }
+    } catch (e) {
       wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+    } finally {
+      this.setData({ moodPublishing: false });
     }
-    this.setData({ moodPublishing: false });
   },
 
   goDiary() {
@@ -621,37 +649,42 @@ Page({
   },
 
   async onTapCallout(e) {
+    if (this.data.navigating) return;
     const tid = e.currentTarget.dataset.tid;
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: { action: "markRead", spaceId: app.globalData.spaceId, threadId: tid },
-    });
-    const r = res.result || {};
-    if (r.success) {
-      // 先更新当前页面，避免返回首页前仍看到已经点开的旧回音。
-      const hasReminder = this.data.annReminder.shown || this.data.festivalReminder.shown;
-      const nextView = Object.assign({}, this.data, {
-        callout: { threadId: "", text: "" },
-        todayCardVisible: hasReminder,
+    this.setData({ navigating: true });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: { action: "markRead", spaceId: app.globalData.spaceId, threadId: tid },
       });
-      this.setData(nextView);
-      this.saveHomeCache(nextView, this._homeCacheMeta || {});
+      const r = res.result || {};
+      if (r.success) {
+        // 先更新当前页面，避免返回首页前仍看到已经点开的旧回音。
+        const hasReminder = this.data.annReminder.shown || this.data.festivalReminder.shown;
+        const nextView = Object.assign({}, this.data, {
+          callout: { threadId: "", text: "" },
+          todayCardVisible: hasReminder,
+        });
+        this.setData(nextView);
+        this.saveHomeCache(nextView, this._homeCacheMeta || {});
+      }
+    } catch (e) {
+      // 已读失败不阻塞用户查看内容，仍然允许进入详情。
     }
-    if (tid.indexOf("card_") === 0) {
-      wx.navigateTo({ url: `/pages/detail/detail?threadId=${tid}` });
-      return;
-    }
-    wx.navigateTo({ url: `/pages/detail/detail?threadId=${tid}` });
+    wx.navigateTo({ url: `/pages/detail/detail?threadId=${tid}`, complete: () => this.setData({ navigating: false }) });
   },
 
   goDetail(e) {
+    if (this.data.navigating) return;
     const tid = e.currentTarget.dataset.tid;
+    this.setData({ navigating: true });
     if (tid && tid.indexOf("card_") === 0) {
-      wx.navigateTo({ url: `/pages/detail/detail?threadId=${tid}` });
+      wx.navigateTo({ url: `/pages/detail/detail?threadId=${tid}`, complete: () => this.setData({ navigating: false }) });
       return;
     }
     wx.navigateTo({
       url: `/pages/detail/detail?threadId=${tid}`,
+      complete: () => this.setData({ navigating: false }),
     });
   },
 

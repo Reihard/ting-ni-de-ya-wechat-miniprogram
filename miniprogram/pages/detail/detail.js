@@ -20,6 +20,7 @@ Page({
     info: { title: "", desc: "", score: 0 },
     eventsExpanded: false,
     loading: false,
+    editSubmitting: false,
     showInputArea: false,
     showRejectInput: false,
     editingInitiate: false,
@@ -433,17 +434,22 @@ Page({
     if (key === "redeem") {
       if (this.data.redeeming) return;   // 防连点重复兑换
       this.setData({ redeeming: true });
-      const res = await wx.cloud.callFunction({
-        name: "loveApi",
-        data: { action: "redeemCard", spaceId: app.globalData.spaceId, cardType: this.data.cardType },
-      });
-      const r = res.result || {};
-      this.setData({ redeeming: false });   // 失败可重试；成功将跳转本页不再用
-      if (r.success) {
-        wx.showToast({ title: GENTLE_V1.detail.used, icon: "success" });
-        wx.redirectTo({ url: `/pages/detail/detail?threadId=${r.threadId}` });
-      } else {
-        wx.showToast({ title: r.msg || GENTLE_V1.detail.retry, icon: "none" });
+      try {
+        const res = await wx.cloud.callFunction({
+          name: "loveApi",
+          data: { action: "redeemCard", spaceId: app.globalData.spaceId, cardType: this.data.cardType },
+        });
+        const r = res.result || {};
+        if (r.success) {
+          wx.showToast({ title: GENTLE_V1.detail.used, icon: "success" });
+          wx.redirectTo({ url: `/pages/detail/detail?threadId=${r.threadId}` });
+        } else {
+          wx.showToast({ title: r.msg || GENTLE_V1.detail.retry, icon: "none" });
+        }
+      } catch (e) {
+        wx.showToast({ title: GENTLE_V1.detail.retry, icon: "none" });
+      } finally {
+        this.setData({ redeeming: false });   // 失败可重试；成功将跳转本页不再用
       }
       return;
     }
@@ -477,22 +483,22 @@ Page({
 
       if (key === "submit" || key === "pause") {
         // 执行/暂不执行：选填
-        await this.submit(key, text);
-        this.setData({ inputText: "" });
+        const ok = await this.submit(key, text);
+        if (ok) this.setData({ inputText: "" });
         return;
       }
 
       if (key === "confirm" || key === "cancel") {
         // 确认/取消：选填
-        await this.submit(key, text, key === "confirm" ? this.data.info.score : undefined);
-        this.setData({ inputText: "" });
+        const ok = await this.submit(key, text, key === "confirm" ? this.data.info.score : undefined);
+        if (ok) this.setData({ inputText: "" });
         return;
       }
 
       if (key === "revise") {
         // 驳回：带理由提交
-        await this.submit(key, text);
-        this.setData({ inputText: "" });
+        const ok = await this.submit(key, text);
+        if (ok) this.setData({ inputText: "" });
         return;
       }
     }
@@ -521,18 +527,15 @@ Page({
         this.load();
         return;
       }
-      await this.submit(key, text);
-      this.setData({ inputText: "", showRejectInput: false });
+      const ok = await this.submit(key, text);
+      if (ok) this.setData({ inputText: "", showRejectInput: false });
       return;
     }
 
-    if (key === "confirm") {
-      await this.submit(key, "", this.data.info.score);
-    } else {
-      await this.submit(key, text);
-    }
-
-    this.setData({ inputText: "", showRejectInput: false });
+    const ok = key === "confirm"
+      ? await this.submit(key, "", this.data.info.score)
+      : await this.submit(key, text);
+    if (ok) this.setData({ inputText: "", showRejectInput: false });
   },
 
   onEditTitleInput(e) {
@@ -556,33 +559,44 @@ Page({
   },
 
   async onSubmitEdit() {
+    if (this.data.loading || this.data.editSubmitting) return;
     const { editTitle, editScore, editReason } = this.data;
     if (!editTitle || !editScore) {
       wx.showToast({ title: GENTLE_V1.detail.fill, icon: "none" });
       return;
     }
     const text = JSON.stringify({ title: editTitle, desc: this.data.info.desc, way: "文字约定", reason: editReason });
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "appendEvent",
-        spaceId: app.globalData.spaceId,
-        threadId: this.data.threadId,
-        type: "initiate",
-        text,
-        score: Number(editScore),
-      },
-    });
-    const r = res.result || {};
-    if (!r.success) {
+    this.setData({ editSubmitting: true, editingInitiate: false });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "appendEvent",
+          spaceId: app.globalData.spaceId,
+          threadId: this.data.threadId,
+          type: "initiate",
+          text,
+          score: Number(editScore),
+        },
+      });
+      const r = res.result || {};
+      if (!r.success) {
+        this.setData({ editingInitiate: true });
+        wx.showToast({ title: GENTLE_V1.detail.retry, icon: "none" });
+        return;
+      }
+      this.setData({ editReason: "" });
+      await this.load();
+    } catch (e) {
+      this.setData({ editingInitiate: true });
       wx.showToast({ title: GENTLE_V1.detail.retry, icon: "none" });
-      return;
+    } finally {
+      this.setData({ editSubmitting: false });
     }
-    this.setData({ editingInitiate: false, editReason: "" });
-    this.load();
   },
 
   async onSubmitCardEdit() {
+    if (this.data.loading || this.data.editSubmitting) return;
     const { editScore, editReason, editActionKey } = this.data;
     if (!editScore) {
       wx.showToast({ title: GENTLE_V1.detail.fill, icon: "none" });
@@ -592,31 +606,40 @@ Page({
     const type = isOffer ? "initiate" : "counter";
     const text = isOffer ? JSON.stringify({ reason: editReason }) : editReason;
 
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "appendEvent",
-        spaceId: app.globalData.spaceId,
-        threadId: this.data.threadId,
-        kind: "card_activate",
-        cardType: this.data.cardType,
-        type,
-        text,
-        score: Number(editScore),
-      },
-    });
-    const r = res.result || {};
-    if (r.success) {
-      this.setData({ editingInitiate: false, editReason: "" });
-      this.load();
-    } else {
+    this.setData({ editSubmitting: true, editingInitiate: false });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "appendEvent",
+          spaceId: app.globalData.spaceId,
+          threadId: this.data.threadId,
+          kind: "card_activate",
+          cardType: this.data.cardType,
+          type,
+          text,
+          score: Number(editScore),
+        },
+      });
+      const r = res.result || {};
+      if (r.success) {
+        this.setData({ editReason: "" });
+        await this.load();
+      } else {
+        this.setData({ editingInitiate: true });
+        wx.showToast({ title: GENTLE_V1.detail.retry, icon: "none" });
+      }
+    } catch (e) {
+      this.setData({ editingInitiate: true });
       wx.showToast({ title: GENTLE_V1.detail.retry, icon: "none" });
+    } finally {
+      this.setData({ editSubmitting: false });
     }
   },
 
   async submit(type, text, score) {
     if (this.data.loading) return;
-    this.setData({ loading: true });
+    this.setData({ loading: true, actions: [], showInputArea: false, showRejectInput: false });
     const data = {
       action: "appendEvent",
       spaceId: app.globalData.spaceId,
@@ -633,13 +656,22 @@ Page({
     }
     if (text) data.text = text;
     if (score) data.score = score;
-    const res = await wx.cloud.callFunction({ name: "loveApi", data });
-    const r = res.result || {};
-    if (r.success) {
-      this.load();
-    } else {
+    try {
+      const res = await wx.cloud.callFunction({ name: "loveApi", data });
+      const r = res.result || {};
+      if (r.success) {
+        await this.load();
+        return true;
+      }
       wx.showToast({ title: GENTLE_V1.detail.retry, icon: "none" });
+      await this.load();
+      return false;
+    } catch (e) {
+      wx.showToast({ title: GENTLE_V1.detail.retry, icon: "none" });
+      await this.load();
+      return false;
+    } finally {
+      this.setData({ loading: false });
     }
-    this.setData({ loading: false });
   },
 });

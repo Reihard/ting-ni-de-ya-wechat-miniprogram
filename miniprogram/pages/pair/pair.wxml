@@ -26,7 +26,7 @@
 
     <view class="join-hint">称呼由 {{guideName}} 为你设定，一旦确认不再修改</view>
 
-    <button class="primary-btn" bindtap="onJoin">{{copy.pair.joinConfirm}}</button>
+    <button class="primary-btn" bindtap="onJoin" loading="{{joining}}" disabled="{{joining}}">{{copy.pair.joinConfirm}}</button>
   </view>
 
   <!-- 正常进入：身份 tab + 内容切换 -->
@@ -71,7 +71,7 @@
         <view class="picker-display">{{startDate || copy.pair.chooseDate}}</view>
       </picker>
 
-      <button class="primary-btn" hover-class="btn-hover" bindtap="onCreate">{{copy.pair.create}}</button>
+      <button class="primary-btn" hover-class="btn-hover" bindtap="onCreate" loading="{{creating}}" disabled="{{creating}}">{{copy.pair.create}}</button>
     </view>
 
     <!-- 回应方：等待邀请 -->

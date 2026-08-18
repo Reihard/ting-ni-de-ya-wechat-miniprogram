@@ -55,8 +55,8 @@
         <view class="preview-warn">{{importTargetExisting ? copy.memories.mergePreview : copy.memories.restorePreview}}</view>
       </block>
       <view class="preview-actions">
-        <button wx:if="{{importPreview.type === 'copy_pack'}}" class="memory-btn memory-btn-primary" bindtap="confirmCopyImport">{{copy.memories.importConfirm}}</button>
-        <button wx:else class="memory-btn memory-btn-primary" bindtap="confirmImport">{{importTargetExisting ? copy.memories.confirmImport : copy.memories.confirmRestore}}</button>
+      <button wx:if="{{importPreview.type === 'copy_pack'}}" class="memory-btn memory-btn-primary" bindtap="confirmCopyImport" loading="{{importing}}" disabled="{{importing}}">{{copy.memories.importConfirm}}</button>
+      <button wx:else class="memory-btn memory-btn-primary" bindtap="confirmImport" loading="{{importing}}" disabled="{{importing}}">{{importTargetExisting ? copy.memories.confirmImport : copy.memories.confirmRestore}}</button>
         <button class="memory-btn memory-btn-secondary" bindtap="cancelImport">{{copy.cards.cancel}}</button>
       </view>
     </view>

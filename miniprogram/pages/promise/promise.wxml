@@ -23,6 +23,6 @@
     <view class="section-title">{{copy.vocabulary.score}}</view>
     <input class="input" type="number" placeholder-class="input-placeholder" placeholder="0-50分" value="{{score}}" bindinput="onScoreInput" />
 
-    <button class="primary-btn" bindtap="onSubmit" disabled="{{submitting}}">{{copy.promise.submit}}</button>
+    <button class="primary-btn" bindtap="onSubmit" loading="{{submitting}}" disabled="{{submitting}}">{{copy.promise.submit}}</button>
   </view>
 </view>

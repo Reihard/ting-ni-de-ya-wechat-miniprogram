@@ -12,6 +12,8 @@ Page({
     spaceId: "",
     startDateMode: "today",
     startDate: "",
+    creating: false,
+    joining: false,
     todayDate: "",
     startDateText: "",
     copy: app.getCopy(),
@@ -76,6 +78,7 @@ Page({
   },
 
   onCreate() {
+    if (this.data.creating) return;
     const { spaceName, guideName, respondName } = this.data;
     if (!spaceName || !guideName || !respondName) {
       wx.showToast({ title: GENTLE_V1.errors.fill, icon: "none" });
@@ -88,62 +91,77 @@ Page({
       cancelText: "再想想",
       success: async (res) => {
         if (!res.confirm) return;
-        if (!app.globalData.openid) {
-          await app.restore();
+        if (this.data.creating) return;
+        this.setData({ creating: true });
+        try {
           if (!app.globalData.openid) {
+            await app.restore();
+            if (!app.globalData.openid) {
+              wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+              return;
+            }
+          }
+          const code = await wx.cloud.callFunction({
+            name: "loveApi",
+            data: { action: "genInviteCode" },
+          });
+          const c = code.result || {};
+          if (!c.success) {
             wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
             return;
           }
+          app.globalData.invite = {
+            code: c.code,
+            spaceName,
+            guideName,
+            respondName,
+            startDate: this.data.startDate,
+            guideOpenid: app.globalData.openid,
+          };
+          wx.setStorageSync(`ting_onboarding_pending_${c.code}`, true);
+          wx.switchTab({ url: "/pages/index/index" });
+        } catch (e) {
+          wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+        } finally {
+          this.setData({ creating: false });
         }
-        const code = await wx.cloud.callFunction({
-          name: "loveApi",
-          data: { action: "genInviteCode" },
-        });
-        const c = code.result || {};
-        if (!c.success) {
-      wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
-          return;
-        }
-        app.globalData.invite = {
-          code: c.code,
-          spaceName,
-          guideName,
-          respondName,
-          startDate: this.data.startDate,
-          guideOpenid: app.globalData.openid,
-        };
-        wx.setStorageSync(`ting_onboarding_pending_${c.code}`, true);
-        wx.switchTab({ url: "/pages/index/index" });
       }
     });
   },
 
   async onJoin() {
     const { spaceId, guideOpenid, guideName, respondName, spaceName, startDateText } = this.data;
-    if (this._joining) return;
+    if (this._joining || this.data.joining) return;
     this._joining = true;
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "joinSpace",
-        code: spaceId,
-        guideOpenid,
-        spaceName,
-        guideName,
-        respondName,
-        startDate: startDateText,
-      },
-    });
-    const r = res.result || {};
-    if (r.success) {
-      app.globalData.spaceId = r.spaceId;
-      app.globalData.role = r.role;
-      app.globalData.invite = null;
-      wx.setStorageSync(`ting_onboarding_pending_${r.spaceId}`, true);
-      wx.switchTab({ url: "/pages/index/index" });
-    } else {
-      wx.showToast({ title: r.msg || GENTLE_V1.errors.retry, icon: "none" });
+    this.setData({ joining: true });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "joinSpace",
+          code: spaceId,
+          guideOpenid,
+          spaceName,
+          guideName,
+          respondName,
+          startDate: startDateText,
+        },
+      });
+      const r = res.result || {};
+      if (r.success) {
+        app.globalData.spaceId = r.spaceId;
+        app.globalData.role = r.role;
+        app.globalData.invite = null;
+        wx.setStorageSync(`ting_onboarding_pending_${r.spaceId}`, true);
+        wx.switchTab({ url: "/pages/index/index" });
+      } else {
+        wx.showToast({ title: r.msg || GENTLE_V1.errors.retry, icon: "none" });
+      }
+    } catch (e) {
+      wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+    } finally {
+      this._joining = false;
+      this.setData({ joining: false });
     }
-    this._joining = false;
   },
 });

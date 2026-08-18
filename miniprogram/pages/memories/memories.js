@@ -216,7 +216,7 @@ Page({
   },
 
   async confirmDisband() {
-    if (!this.data.canDisband) return;
+    if (!this.data.canDisband || this.data.importing) return;
     const confirm = await new Promise((resolve) => {
       wx.showModal({
         title: GENTLE_V1.memories.finalConfirm,
@@ -282,6 +282,7 @@ Page({
   },
 
   parseManual() {
+    if (this.data.importing) return;
     const text = (this.data.manualText || "").trim();
     const parsed = unpackBackup(text);
     if (!parsed) {
@@ -316,6 +317,7 @@ Page({
   },
 
   confirmCopyImport() {
+    if (this.data.importing) return;
     const copyPack = this.data.importCopyPack;
     if (!copyPack) {
       wx.showToast({ title: "没有找到语气内容", icon: "none" });
@@ -335,6 +337,7 @@ Page({
   },
 
   async confirmImport() {
+    if (this.data.importing) return;
     const backup = this.data.importData;
     if (!backup) return;
     // 语气包只保存在本机，绝不能进入空间备份恢复接口。

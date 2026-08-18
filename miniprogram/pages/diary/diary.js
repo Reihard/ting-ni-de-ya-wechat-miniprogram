@@ -21,6 +21,7 @@ Page({
     replyMood: false,
     replyMoodTags: [],
     replyMoodEventId: "",
+    submitting: false,
   },
 
   onLoad(options) {
@@ -111,29 +112,38 @@ Page({
   },
 
   async onSubmit() {
+    if (this.data.submitting) return;
     const text = this.data.input;
     if (!text) {
       wx.showToast({ title: "先写一句话", icon: "none" });
       return;
     }
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "appendEvent",
-        spaceId: app.globalData.spaceId,
-        kind: "none",
-        type: "journal",
-        text,
-        threadId: this.data.replyMood ? `mood_${this.data.replyMoodEventId}` : "",
-        moodTags: this.data.replyMood ? this.data.replyMoodTags : [],
-      },
-    });
-    const r = res.result || {};
-    if (r.success) {
-      this.setData({ input: "" });
-      this.loadDiary();
-    } else {
+    // 先收起输入区，避免网络慢时重复点击；失败时恢复并保留文字。
+    this.setData({ submitting: true });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "appendEvent",
+          spaceId: app.globalData.spaceId,
+          kind: "none",
+          type: "journal",
+          text,
+          threadId: this.data.replyMood ? `mood_${this.data.replyMoodEventId}` : "",
+          moodTags: this.data.replyMood ? this.data.replyMoodTags : [],
+        },
+      });
+      const r = res.result || {};
+      if (r.success) {
+        this.setData({ input: "" });
+        await this.loadDiary();
+      } else {
+        wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+      }
+    } catch (e) {
       wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+    } finally {
+      this.setData({ submitting: false });
     }
   },
 

@@ -10,7 +10,7 @@
         </view>
         <view class="ann-elapsed" wx:if="{{item.elapsedText}}">{{item.elapsedText}}</view>
         <view class="ann-next" wx:if="{{item.nextText}}">✦ {{item.nextText}}</view>
-        <view class="ann-del" data-index="{{index}}" bindtap="onDelete">{{copy.anniversary.delete}}</view>
+        <view class="ann-del" data-index="{{index}}" bindtap="onDelete">{{deletingIndex === index ? '正在保存…' : copy.anniversary.delete}}</view>
       </view>
     </view>
     <view wx:else class="ann-empty">{{copy.anniversary.empty}}</view>
@@ -41,6 +41,6 @@
       </label>
     </radio-group>
 
-    <button class="primary-btn" bindtap="onAdd">{{copy.anniversary.save}}</button>
+    <button class="primary-btn" bindtap="onAdd" loading="{{saving}}" disabled="{{saving}}">{{copy.anniversary.save}}</button>
   </view>
 </view>

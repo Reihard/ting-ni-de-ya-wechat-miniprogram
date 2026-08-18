@@ -201,4 +201,5 @@
 .event-step-time { flex: 0 0 76rpx; color: var(--c-text-sub); font-size: 20rpx; }
 .event-step-label { color: var(--c-text); font-weight: 500; }
 .event-step-quote { margin-left: 88rpx; color: var(--c-text-2); word-break: break-all; }
+.reply-mood-content { margin-top: 8rpx; padding-top: 8rpx; border-top: 1rpx solid var(--c-line-soft); }
 .event-step-meta { margin-left: 88rpx; color: var(--c-text-sub); font-size: 19rpx; margin-top: 2rpx; }

@@ -8,10 +8,11 @@
     </view>
   </view>
 
-  <view class="write-card">
+  <view class="write-card" wx:if="{{!submitting}}">
     <textarea class="write-input" maxlength="200" placeholder="{{copy.diary.placeholder}}" value="{{input}}" bindinput="onInput" />
-    <button class="primary-btn" bindtap="onSubmit">{{copy.diary.submit}}</button>
+    <button class="primary-btn" bindtap="onSubmit" disabled="{{submitting}}">{{copy.diary.submit}}</button>
   </view>
+  <view class="write-card" wx:if="{{submitting}}">正在保存这段心意……</view>
 
   <view class="section-title">{{mySectionTitle}}</view>
   <view class="diary-group diary-mine">

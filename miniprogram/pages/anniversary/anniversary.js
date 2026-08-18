@@ -8,6 +8,8 @@ Page({
     date: "",
     remindCycle: "year",
     showAdd: false,
+    saving: false,
+    deletingIndex: -1,
     themeClass: "",
     copy: app.getCopy(),
   },
@@ -74,6 +76,7 @@ Page({
   },
 
   async onAdd() {
+    if (this.data.saving) return;
     const { name, date, remindCycle } = this.data;
     if (!name || !date) {
       wx.showToast({ title: GENTLE_V1.anniversary.fill, icon: "none" });
@@ -81,32 +84,55 @@ Page({
     }
     const list = (this._raw || []).slice();
     list.push({ name, date, remindCycle });
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: { action: "updateSpace", spaceId: app.globalData.spaceId, anniversaries: list },
-    });
-    const r = res.result || {};
-    if (r.success) {
-      this.setData({ showAdd: false, name: "", date: "", remindCycle: "year" });
-      this.loadAnniversaries();
-    } else {
+    this.setData({ saving: true, showAdd: false });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: { action: "updateSpace", spaceId: app.globalData.spaceId, anniversaries: list },
+      });
+      const r = res.result || {};
+      if (r.success) {
+        this.setData({ name: "", date: "", remindCycle: "year" });
+        await this.loadAnniversaries();
+      } else {
+        this.setData({ showAdd: true });
+        wx.showToast({ title: GENTLE_V1.anniversary.retry, icon: "none" });
+      }
+    } catch (e) {
+      this.setData({ showAdd: true });
       wx.showToast({ title: GENTLE_V1.anniversary.retry, icon: "none" });
+    } finally {
+      this.setData({ saving: false });
     }
   },
 
   async onDelete(e) {
     const idx = e.currentTarget.dataset.index;
+    if (this.data.saving || this.data.deletingIndex === idx) return;
     const list = (this._raw || []).slice();
+    const previous = this._raw;
     list.splice(idx, 1);
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: { action: "updateSpace", spaceId: app.globalData.spaceId, anniversaries: list },
-    });
-    const r = res.result || {};
-    if (r.success) {
-      this.loadAnniversaries();
-    } else {
+    this._raw = list;
+    this.setData({ deletingIndex: idx, anniversaries: list.map((a) => this.withComputed(a)) });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: { action: "updateSpace", spaceId: app.globalData.spaceId, anniversaries: list },
+      });
+      const r = res.result || {};
+      if (r.success) {
+        await this.loadAnniversaries();
+      } else {
+        this._raw = previous;
+        this.setData({ anniversaries: previous.map((a) => this.withComputed(a)) });
+        wx.showToast({ title: GENTLE_V1.anniversary.retry, icon: "none" });
+      }
+    } catch (e) {
+      this._raw = previous;
+      this.setData({ anniversaries: previous.map((a) => this.withComputed(a)) });
       wx.showToast({ title: GENTLE_V1.anniversary.retry, icon: "none" });
+    } finally {
+      this.setData({ deletingIndex: -1 });
     }
   },
 });

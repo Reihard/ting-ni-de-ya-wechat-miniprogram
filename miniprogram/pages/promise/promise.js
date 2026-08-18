@@ -54,22 +54,27 @@ Page({
     }
     this.setData({ submitting: true });  // 禁用按钮
     const text = JSON.stringify({ title, desc: description, way });
-    const res = await wx.cloud.callFunction({
-      name: "loveApi",
-      data: {
-        action: "appendEvent",
-        spaceId: app.globalData.spaceId,
-        type: "initiate",
-        text,
-        score: Number(score),
-      },
-    });
-    this.setData({ submitting: false });  // 恢复按钮
-    const r = res.result || {};
-    if (r.success) {
-      wx.redirectTo({ url: `/pages/detail/detail?threadId=${r.threadId}` });
-    } else {
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "loveApi",
+        data: {
+          action: "appendEvent",
+          spaceId: app.globalData.spaceId,
+          type: "initiate",
+          text,
+          score: Number(score),
+        },
+      });
+      const r = res.result || {};
+      if (r.success) {
+        wx.redirectTo({ url: `/pages/detail/detail?threadId=${r.threadId}` });
+      } else {
+        wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+      }
+    } catch (e) {
       wx.showToast({ title: GENTLE_V1.errors.retry, icon: "none" });
+    } finally {
+      this.setData({ submitting: false });  // 恢复按钮
     }
   },
 });

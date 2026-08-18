@@ -55,7 +55,7 @@ module.exports = { hasTag: hasTag };
         <view class="mood-tag mood-custom" hover-class="t-hover" bindtap="toggleCustomMoodInput" wx:if="{{!showCustomMoodInput}}">{{copy.home.moodInput}}</view>
         <view class="mood-custom-input-area" wx:if="{{showCustomMoodInput}}">
           <input class="mood-custom-input" placeholder="{{copy.home.moodPlaceholder}}" maxlength="30" value="{{customMoodText}}" bindinput="onCustomMoodInput" />
-          <button class="primary-btn" hover-class="btn-hover" bindtap="submitCustomMood">{{copy.home.confirm}}</button>
+          <button class="primary-btn" hover-class="btn-hover" bindtap="submitCustomMood" loading="{{moodPublishing}}" disabled="{{moodPublishing}}">{{copy.home.confirm}}</button>
           <button class="ghost-btn" hover-class="t-hover" bindtap="toggleCustomMoodInput">{{copy.home.cancel}}</button>
         </view>
       </view>
@@ -89,8 +89,8 @@ module.exports = { hasTag: hasTag };
     <view class="today-anniversary" wx:if="{{annReminder.shown}}">
       <view class="today-text">今天是你们的「{{annReminder.name}}」。一起走过的 {{annReminder.days}} 天，已经变成很多值得珍藏的小事。</view>
       <view class="reminder-actions">
-        <button class="reminder-btn" bindtap="onAnniversaryGrant">{{copy.home.anniversaryGrant}}</button>
-        <button class="reminder-btn ghost" bindtap="onAnniversaryRemember">今天先记着</button>
+        <button class="reminder-btn" bindtap="onAnniversaryGrant" loading="{{anniversarySubmitting}}" disabled="{{anniversarySubmitting}}">{{copy.home.anniversaryGrant}}</button>
+        <button class="reminder-btn ghost" bindtap="onAnniversaryRemember" loading="{{anniversarySubmitting}}" disabled="{{anniversarySubmitting}}">今天先记着</button>
       </view>
     </view>
     <view class="today-festival" wx:if="{{festivalReminder.shown}}">

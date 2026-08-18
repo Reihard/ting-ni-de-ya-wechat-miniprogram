@@ -18,7 +18,7 @@
     </view>
 
     <view class="card-actions" wx:if="{{item.actions.length && !needInput}}">
-      <button class="card-btn" wx:for="{{item.actions}}" wx:for-item="act" wx:key="key" data-card="{{item.cardType}}" data-key="{{act.key}}" catchtap="onTapAction">{{act.label}}</button>
+        <button class="card-btn" wx:for="{{item.actions}}" wx:for-item="act" wx:key="key" data-card="{{item.cardType}}" data-key="{{act.key}}" catchtap="onTapAction" loading="{{cardSubmitting}}" disabled="{{cardSubmitting}}">{{act.label}}</button>
     </view>
 
     <!-- 输入区移到卡片内，仅当前操作的卡显示 -->
@@ -27,7 +27,7 @@
       <input class="field-input" type="number" maxlength="3" placeholder="0-999" value="{{inputScore}}" bindinput="onInputScore" />
       <view class="input-actions">
         <button class="ghost-btn" catchtap="onCancelInput">{{copy.cards.cancel}}</button>
-        <button class="cta-btn" catchtap="onSubmitInput">{{copy.cards.send}}</button>
+        <button class="cta-btn" catchtap="onSubmitInput" loading="{{cardSubmitting}}" disabled="{{cardSubmitting}}">{{copy.cards.send}}</button>
       </view>
     </view>
   </view>
@@ -40,7 +40,7 @@
       <input class="field-input" maxlength="20" placeholder="{{copy.cards.customNamePlaceholder}}" value="{{customName}}" data-key="customName" bindinput="onCustomInput" />
       <textarea class="field-input custom-card-desc" maxlength="100" placeholder="{{copy.cards.customGuideDescPlaceholder}}" value="{{customDesc}}" data-key="customDesc" bindinput="onCustomInput"></textarea>
       <input class="field-input" type="number" maxlength="2" placeholder="{{copy.cards.scorePlaceholder}}" value="{{customScore}}" data-key="customScore" bindinput="onCustomInput" />
-      <button class="cta-btn" bindtap="createCustom">{{copy.cards.customSave}}</button>
+      <button class="cta-btn" bindtap="createCustom" loading="{{customSubmitting}}" disabled="{{customSubmitting}}">{{copy.cards.customSave}}</button>
     </view>
   </view>
 
@@ -52,7 +52,7 @@
       <input class="field-input" maxlength="20" placeholder="{{copy.cards.customNamePlaceholder}}" value="{{customName}}" data-key="customName" bindinput="onCustomInput" />
       <textarea class="field-input custom-card-desc" maxlength="100" placeholder="{{copy.cards.customRespondDescPlaceholder}}" value="{{customDesc}}" data-key="customDesc" bindinput="onCustomInput"></textarea>
       <input class="field-input" type="number" maxlength="2" placeholder="{{copy.cards.payScorePlaceholder}}" value="{{customScore}}" data-key="customScore" bindinput="onCustomInput" />
-      <button class="cta-btn" bindtap="createCustomRequest">{{copy.cards.customRequest}}</button>
+      <button class="cta-btn" bindtap="createCustomRequest" loading="{{customSubmitting}}" disabled="{{customSubmitting}}">{{copy.cards.customRequest}}</button>
     </view>
   </view>
 </view>
