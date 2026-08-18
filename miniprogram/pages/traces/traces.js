@@ -204,6 +204,8 @@ Page({
         return {
           eventId: e._id,
           threadId: e.threadId || "",
+          // 同一条心情的多次回复共用 mood_<eventId>，合并为一张回忆卡；
+          // 不同心情拥有不同的事件 ID，因此自然分开显示。
           groupKey: e.threadId || `event_${e._id}`,
           dateKey,
           dateLabel: `${eventDate.getMonth() + 1} 月 ${eventDate.getDate()} 日`,
