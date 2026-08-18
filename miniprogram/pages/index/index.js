@@ -36,6 +36,24 @@ function parseTitle(text) {
   return parsed ? parsed.title : text;
 }
 
+// 首页只展示真正的流程线程。自由记录即使历史上误带了 threadId/kind，
+// 也不能被当成“有新的回音”或“最近的小事”。普通约定必须包含合法的标题/正文定义。
+function isHomeFlowThread(events) {
+  if (!events || !events.length) return false;
+  const kind = events[0].kind;
+  if (kind === "card_activate" || kind === "card_execute") return true;
+  if (kind !== "promise") return false;
+  return events.some((e) => {
+    if (e.type !== "initiate") return false;
+    try {
+      const definition = JSON.parse(e.text || "{}");
+      return !!definition && typeof definition.title === "string" && definition.title.trim() !== "";
+    } catch (err) {
+      return false;
+    }
+  });
+}
+
 function startOfToday() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
@@ -92,7 +110,8 @@ Page({
     if (
       !cache ||
       cache.spaceId !== active.spaceId ||
-      cache.cacheVersion !== 1 ||
+      // 3：清理旧版首页缓存，避免历史错误线程继续占据“有新的回音/最近的小事”。
+      cache.cacheVersion !== 3 ||
       (cache.copyPackId && cache.copyPackId !== copyPackId) ||
       !cache.view
     ) return null;
@@ -121,7 +140,7 @@ Page({
     }
     wx.setStorageSync("ting_home_cache_" + spaceId, {
       spaceId,
-      cacheVersion: 1,
+      cacheVersion: 3,
       cachedAt: Date.now(),
       view,
       lastEventAt: meta.lastEventAt || 0,
@@ -211,12 +230,14 @@ Page({
     const lastEventAt = events.reduce((latest, e) => Math.max(latest, e.createdAt || 0), 0);
     const byThread = {};
     events.forEach((e) => {
-      // 随手记、心情和纪念日等自由事件不属于约定线程。
-      // 回应心情时，随手记会带 mood_* threadId 用于关联原心情，不能因此被首页当成约定展示。
-      const isFreeEvent = ["journal", "mood", "anniversaryGrant", "remember", "festivalGrant"].includes(e.type);
-      if (!e.threadId || isFreeEvent) return;
+      // 首页流程区只接受规范化后的流程事件；自由记录即使带有线程 ID 也不能进入。
+      const isFlowEvent = ["promise", "card_activate", "card_execute"].includes(e.kind);
+      if (!e.threadId || !isFlowEvent) return;
       if (!byThread[e.threadId]) byThread[e.threadId] = [];
       byThread[e.threadId].push(e);
+    });
+    Object.keys(byThread).forEach((tid) => {
+      if (!isHomeFlowThread(byThread[tid])) delete byThread[tid];
     });
 
     const pendingPromiseCount = Object.keys(byThread).filter((tid) => {
@@ -240,6 +261,8 @@ Page({
       }
     });
     const pendingCardCount = Object.keys(byCard).filter((card) => {
+      const cardEventsForState = byCard[card];
+      if (card.indexOf("custom_") === 0 && cardEventsForState.some((e) => e.type === "create")) return false;
       const st = deriveCardState(byCard[card]);
       return st.state === "待回应" || st.state === "协商中";
     }).length;
@@ -261,6 +284,7 @@ Page({
       const isCard = tid.indexOf("card_") === 0;
       let box;
       if (isCard) {
+        if (tid.indexOf("custom_") > -1 && evs.some((e) => e.type === "create")) return;
         const cs = deriveCardState(evs);
         const sortedCardEvents = evs.slice().sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
         const latestCardEvent = sortedCardEvents[sortedCardEvents.length - 1];
@@ -296,6 +320,7 @@ Page({
       let state = "";
       let text = "";
       if (isCard) {
+        if (tid.indexOf("custom_") > -1 && evs.some((e) => e.type === "create")) return;
         const cs = deriveCardState(evs);
         if (cs.terminal) return;
         if (cs.state === "暂不启用" || cs.state === "已放弃") return;  // 首页不显示暂不启用/已放弃的卡

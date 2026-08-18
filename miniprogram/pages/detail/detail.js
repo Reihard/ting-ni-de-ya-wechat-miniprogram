@@ -71,12 +71,16 @@ Page({
     if (!r.success) return;
 
     const events = (r.events || []).slice().reverse();
+    const stateEvents = events.filter((e) => ["promise", "card_activate", "card_execute"].includes(e.kind));
+    const invalidPromiseThread = !this.data.isCard && !stateEvents.some((e) => e.kind === "promise" && e.type === "initiate");
     const customDefinition = this.data.isCard && events.find((e) => e.type === "create" || e.type === "request");
     const customCreate = this.data.isCard && events.find((e) => e.type === "create");
     const cardEvents = this.data.isCard ? events.filter((e) => e.type !== "create") : events;
-    const st = this.data.isCard
+    const st = invalidPromiseThread
+      ? { state: "随手记", terminal: true, softEnd: false, guideActions: [], respondActions: [] }
+      : this.data.isCard
       ? (customCreate ? { state: "已生效", terminal: true, price: customCreate.score || 0 } : deriveCardState(cardEvents))
-      : deriveState(events);
+      : deriveState(stateEvents);
     if (customDefinition && !customCreate && !events.some((e) => e.type === "accept")) {
       st.state = events.some((e) => e.type === "pause") ? "暂不启用" : "待 TA 确认";
     }
@@ -312,7 +316,7 @@ Page({
 
     let myActionsKey;
     if (this.data.isExecute) {
-      const lastEvent = events[events.length - 1];
+      const lastEvent = stateEvents[stateEvents.length - 1];
 
       if (st.state === "待执行") {
         // initiate 后（或 revise 后回到待回应）
@@ -384,7 +388,7 @@ Page({
 
     let softCopy = "";
     if (this.data.isCard) {
-      const initiateCount = events.filter((e) => e.type === "initiate").length;
+      const initiateCount = stateEvents.filter((e) => e.type === "initiate").length;
       if (this.data.role === "respond" && initiateCount >= 2 && st.state === "待回应") {
         // 出价 2 次截止，引导方做最后决定
         softCopy = GENTLE_V1.detail.softTwice;

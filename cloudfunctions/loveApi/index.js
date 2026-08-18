@@ -82,6 +82,7 @@ const getSpace = async (spaceId) => {
   return doc.data || null;
 };
 
+
 const checkContent = async (content) => {
   // 敏感词检测：明确判定违规才拦截；
   // 纯接口故障（偶发超时/网络抖）重试 1 次，仍失败则放行，避免误伤正常用户发内容。
@@ -473,6 +474,21 @@ const appendEvent = async (event) => {
     let tid = threadId;
     if (isCard && !tid) {
       tid = `card_${cardType}`;
+    }
+    // 自由记录不能挂到普通约定线程；回应心情只能关联真实的 mood 事件。
+    if (type === "mood") {
+      tid = "";
+    }
+    if (type === "journal") {
+      if (!tid || tid.indexOf("mood_") !== 0) {
+        tid = "";
+      } else {
+        const moodId = tid.slice("mood_".length);
+        const moodDoc = await transaction.collection(EVENTS).doc(moodId).get().catch(() => null);
+        if (!moodDoc || !moodDoc.data || moodDoc.data.spaceId !== spaceId || moodDoc.data.type !== "mood") {
+          return { fail: "找不到要回应的心情" };
+        }
+      }
     }
     if (type === "initiate" && !tid) {
       tid = `${spaceId}_${Date.now()}`;
