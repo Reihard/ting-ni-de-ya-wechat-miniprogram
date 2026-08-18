@@ -204,6 +204,7 @@ const GENTLE_V1 = {
     storyStartTitle: "你们的故事开始了",
     journalTitle: "留下一笔随手记",
     moodReplyTitle: "回应 TA 的心情",
+    moodReplyStepLabel: "回复",
     cancelContent: "这条约定，先放下了。没能一起完成，但你们的每一次商量，都算数。",
     rememberedContent: "这一天，被记着了",
     beginContent: "你们的故事，从这一天开始",

@@ -128,7 +128,7 @@ Page({
         const actorName = e.actor === "system" ? GENTLE_V1.traces.systemActor : nicknameByRole[e.actor] || "";
         let typeLabel = GENTLE_V1.eventLabels[e.type] || e.type;
         if (e.type === "journal" && e.threadId && e.threadId.indexOf("mood_") === 0) {
-          typeLabel = e.actor === app.globalData.role ? "回应了 TA 的心情" : "回应了你的心情";
+          typeLabel = GENTLE_V1.traces.moodReplyStepLabel || "回复";
         }
         // 自定义心意卡的两个入口语义不同：引导方是在准备奖励，回应方是在提出请求。
         if (e.kind === "card_activate" && e.type === "create") typeLabel = GENTLE_V1.traces.customCardCreateLabel;
@@ -257,6 +257,18 @@ Page({
       const group = allGroups[key];
       if (!dateMap[group.dateKey]) dateMap[group.dateKey] = { dateKey: group.dateKey, dateLabel: group.dateLabel, groups: [] };
       group.steps.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+      // 同一条心情的多次回复只引用一次原心情，后续步骤只显示回复内容。
+      let moodQuoteShown = false;
+      group.steps = group.steps.map((step) => {
+        if (!step.replyMoodText) return step;
+        if (moodQuoteShown) return Object.assign({}, step, { replyMoodText: "" });
+        moodQuoteShown = true;
+        return step;
+      });
+      if (group.steps.some((step) => step.replyMoodText)) {
+        // 卡片标题已说明这是回应心情，不再重复显示“回应了 TA 的心情”。
+        group.result = "";
+      }
       dateMap[group.dateKey].groups.push(group);
     });
     const groups = Object.keys(dateMap)
