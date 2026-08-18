@@ -209,7 +209,10 @@ Page({
     const lastEventAt = events.reduce((latest, e) => Math.max(latest, e.createdAt || 0), 0);
     const byThread = {};
     events.forEach((e) => {
-      if (!e.threadId) return;
+      // 随手记、心情和纪念日等自由事件不属于约定线程。
+      // 回应心情时，随手记会带 mood_* threadId 用于关联原心情，不能因此被首页当成约定展示。
+      const isFreeEvent = ["journal", "mood", "anniversaryGrant", "remember", "festivalGrant"].includes(e.type);
+      if (!e.threadId || isFreeEvent) return;
       if (!byThread[e.threadId]) byThread[e.threadId] = [];
       byThread[e.threadId].push(e);
     });
