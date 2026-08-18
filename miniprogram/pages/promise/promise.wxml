@@ -6,10 +6,10 @@
 
   <view class="form-card">
     <view class="section-title">{{copy.promise.titleLabel}}</view>
-    <input class="input" maxlength="15" placeholder-class="input-placeholder" placeholder="例如：今天拍一张可爱自拍给我" value="{{title}}" bindinput="onTitleInput" />
+    <input class="input" maxlength="30" placeholder-class="input-placeholder" placeholder="例如：今天拍一张可爱自拍给我" value="{{title}}" bindinput="onTitleInput" />
 
     <view class="section-title">补充一句</view>
-    <textarea class="textarea" maxlength="30" placeholder-class="input-placeholder" placeholder="例如：今天想认真收到你的回应和记录" value="{{description}}" bindinput="onDescInput" />
+    <textarea class="textarea" maxlength="100" placeholder-class="input-placeholder" placeholder="补充说明（100字以内）" value="{{description}}" bindinput="onDescInput" />
 
     <view class="section-title">希望怎样完成</view>
     <radio-group bindchange="selectWay">

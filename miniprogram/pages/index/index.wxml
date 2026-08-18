@@ -54,7 +54,7 @@ module.exports = { hasTag: hasTag };
         <view class="mood-tag {{utils.hasTag(selectedMood, item) ? 'mood-active' : ''}}" hover-class="t-hover" wx:for="{{moodTags}}" wx:key="index" data-tag="{{item}}" bindtap="onMoodTap">{{item}}</view>
         <view class="mood-tag mood-custom" hover-class="t-hover" bindtap="toggleCustomMoodInput" wx:if="{{!showCustomMoodInput}}">{{copy.home.moodInput}}</view>
         <view class="mood-custom-input-area" wx:if="{{showCustomMoodInput}}">
-          <input class="mood-custom-input" placeholder="{{copy.home.moodPlaceholder}}" maxlength="10" value="{{customMoodText}}" bindinput="onCustomMoodInput" />
+          <input class="mood-custom-input" placeholder="{{copy.home.moodPlaceholder}}" maxlength="30" value="{{customMoodText}}" bindinput="onCustomMoodInput" />
           <button class="primary-btn" hover-class="btn-hover" bindtap="submitCustomMood">{{copy.home.confirm}}</button>
           <button class="ghost-btn" hover-class="t-hover" bindtap="toggleCustomMoodInput">{{copy.home.cancel}}</button>
         </view>

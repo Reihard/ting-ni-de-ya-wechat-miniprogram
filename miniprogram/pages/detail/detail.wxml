@@ -21,7 +21,7 @@
 
   <view class="edit-area" wx:if="{{editingInitiate && !isCard}}">
     <view class="form-section">{{copy.vocabulary.promise}}{{copy.detail.titleSuffix}}</view>
-    <input class="input" maxlength="15" value="{{editTitle}}" bindinput="onEditTitleInput" />
+    <input class="input" maxlength="30" value="{{editTitle}}" bindinput="onEditTitleInput" />
 
     <view class="form-section">{{copy.detail.scoreLabel}}</view>
     <input class="input" type="number" value="{{editScore}}" bindinput="onEditScoreInput" />

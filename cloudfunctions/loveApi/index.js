@@ -434,9 +434,20 @@ const appendEvent = async (event) => {
     const role = space.roles[openid];
     if (requiredActor && role !== requiredActor) return { fail: "无权操作" };
     if (space.status === "backup") return { fail: "空间已解除，仅可查看和导出" };
-    const maxTextLength = type === "journal" ? 200 : 50;
+    const maxTextLength = type === "journal" ? 200 : (type === "mood" ? 30 : 50);
     if (type !== "initiate" && type !== "create" && type !== "request" && text && text.length > maxTextLength) {
       return { fail: "字数超限" };
+    }
+    // 普通约定的标题和正文由 JSON 文本承载，云端与前端保持同一限制。
+    if (type === "initiate" && !isCard && !isExecute) {
+      try {
+        const definition = JSON.parse(text || "{}");
+        if (typeof definition.title !== "string" || definition.title.length > 30 || (definition.desc || "").length > 100) {
+          return { fail: "约定标题最多30字，正文最多100字" };
+        }
+      } catch (err) {
+        return { fail: "约定内容格式无效" };
+      }
     }
 
     if (type === "anniversaryGrant" || type === "remember") {
